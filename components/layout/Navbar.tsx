@@ -99,13 +99,15 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/shop"
+            <a
+              href={siteConfig.shopUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden items-center gap-2 rounded-lg bg-accent px-4 py-2 text-[11px] font-semibold tracking-[0.15em] text-white shadow-[0_0_24px_rgba(139,92,246,0.4)] transition-all hover:bg-accent-hover hover:shadow-[0_0_32px_rgba(139,92,246,0.55)] md:inline-flex"
             >
               <ShoppingBag size={13} />
               SHOP NOW
-            </Link>
+            </a>
             <button
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? 'Tutup menu' : 'Buka menu'}

@@ -57,14 +57,16 @@ export function MobileMenu({ onClose }: MobileMenuProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Link
-          href="/shop"
+        <a
+          href={siteConfig.shopUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={onClose}
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3.5 text-sm font-semibold tracking-[0.15em] text-white shadow-[0_0_32px_rgba(139,92,246,0.4)]"
         >
           <ShoppingBag size={16} />
           SHOP NOW
-        </Link>
+        </a>
         <p className="text-center font-mono text-[10px] tracking-widest text-faint">
           SECURE • CONNECT • BUILD
         </p>

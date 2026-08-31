@@ -15,6 +15,10 @@ export const siteConfig = {
    * Jangan diisi asal: ganti melalui .env.local (NEXT_PUBLIC_SHOPEE_URL).
    */
   shopeeUrl: process.env.NEXT_PUBLIC_SHOPEE_URL ?? 'YOUR_SHOPEE_URL',
+  /** URL toko utama (tombol SHOP NOW / collshp) — ganti lewat NEXT_PUBLIC_SHOP_URL */
+  shopUrl:
+    process.env.NEXT_PUBLIC_SHOP_URL ??
+    'https://collshp.com/warung_sosmed',
   /**
    * URL WhatsApp order — placeholder sampai nomor asli diberikan.
    * Ganti melalui .env.local (NEXT_PUBLIC_WHATSAPP_URL).
