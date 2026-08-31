@@ -5,6 +5,7 @@ import type { Product } from '@/data/types';
 import { purchaseLink } from '@/data/products';
 import { formatPrice } from '@/lib/utils';
 import { MagneticButton } from '@/components/ui/MagneticButton';
+import { TiltCard } from '@/components/ui/TiltCard';
 
 interface ProductDetailProps {
   product: Product;
@@ -38,16 +39,18 @@ export function ProductDetail({ product }: ProductDetailProps) {
         )}
 
         <div className="grid items-start gap-8 md:grid-cols-[auto_1fr]">
-          <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-2xl border border-line bg-surface-2/70 p-6 shadow-[0_0_40px_rgba(139,92,246,0.15)] md:mx-0">
-            <Image
-              src={product.logo}
-              alt={product.name}
-              width={120}
-              height={120}
-              className="h-auto w-full object-contain"
-              unoptimized
-            />
-          </div>
+          <TiltCard maxTilt={10} scale={1.04}>
+            <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-2xl border border-line bg-surface-2/70 p-6 shadow-[0_0_40px_rgba(139,92,246,0.15)] md:mx-0">
+              <Image
+                src={product.logo}
+                alt={product.name}
+                width={120}
+                height={120}
+                className="h-auto w-full object-contain"
+                unoptimized
+              />
+            </div>
+          </TiltCard>
 
           <div>
             <p className="font-mono text-[10px] tracking-[0.3em] text-accent">

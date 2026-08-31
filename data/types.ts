@@ -5,7 +5,7 @@ export interface Product {
   slug: string;
   name: string;
   category: ProductCategory;
-  /** path logo di /images/products/ */
+  /** path logo di /logos/ */
   logo: string;
   /** nama paket, mis. "1 Profil • 1 User" */
   package: string;
@@ -20,7 +20,7 @@ export interface Product {
 
 export interface Technology {
   name: string;
-  /** path ikon di /images/icons/ */
+  /** path ikon di /logos/ */
   icon: string;
 }
 

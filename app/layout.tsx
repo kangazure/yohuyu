@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { siteConfig } from '@/data/config';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { MouseProvider } from '@/components/ui/MouseProvider';
+import { MouseGlow } from '@/components/ui/MouseGlow';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
@@ -53,9 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id" className="dark" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col bg-void font-sans text-fg antialiased">
         <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <MouseProvider>
+            <MouseGlow />
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </MouseProvider>
         </ThemeProvider>
       </body>
     </html>

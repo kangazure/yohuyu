@@ -15,7 +15,7 @@ export function TechnologyIcons({ items, className }: TechnologyIconsProps) {
         <span
           key={t.name}
           title={t.name}
-          className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-3 py-1.5 transition-colors hover:border-accent/50"
+          className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-3 py-1.5 transition-all duration-300 hover:scale-105 hover:border-accent/60 hover:shadow-[0_0_14px_rgba(139,92,246,0.25)]"
         >
           <Image
             src={t.icon}

@@ -263,7 +263,7 @@ export interface Product {
   slug: string;          // URL: /shop/<slug>
   name: string;
   category: ProductCategory;
-  logo: string;          // /images/products/<file>
+  logo: string;          // /logos/<file>
   package: string;       // nama paket, mis. "Paket Lengkap 1 Bulan"
   duration: string;      // mis. "30 hari"
   price: number;         // IDR

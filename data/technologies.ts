@@ -2,15 +2,19 @@ import type { Project, Skill, Technology } from './types';
 
 /** Daftar teknologi yang didalami (untuk About & TechnologyIcons) */
 export const technologies: Technology[] = [
-  { name: 'Linux', icon: '/images/icons/linux.svg' },
-  { name: 'MikroTik', icon: '/images/icons/mikrotik.svg' },
-  { name: 'Docker', icon: '/images/icons/docker.svg' },
-  { name: 'Kali Linux', icon: '/images/icons/kali.svg' },
-  { name: 'Wireshark', icon: '/images/icons/wireshark.svg' },
-  { name: 'React', icon: '/images/icons/react.svg' },
-  { name: 'Next.js', icon: '/images/icons/nextjs.svg' },
-  { name: 'Node.js', icon: '/images/icons/nodejs.svg' },
-  { name: 'Supabase', icon: '/images/icons/supabase.svg' },
+  { name: 'Linux', icon: '/logos/linux.svg' },
+  { name: 'MikroTik', icon: '/logos/mikrotik.svg' },
+  { name: 'Docker', icon: '/logos/docker.svg' },
+  { name: 'Kali Linux', icon: '/logos/kali.svg' },
+  { name: 'Wireshark', icon: '/logos/wireshark.svg' },
+  { name: 'React', icon: '/logos/react.svg' },
+  { name: 'Next.js', icon: '/logos/nextjs.svg' },
+  { name: 'TypeScript', icon: '/logos/typescript.svg' },
+  { name: 'Node.js', icon: '/logos/nodejs.svg' },
+  { name: 'PHP', icon: '/logos/php.svg' },
+  { name: 'Laravel', icon: '/logos/laravel.svg' },
+  { name: 'GitHub', icon: '/logos/github.svg' },
+  { name: 'Supabase', icon: '/logos/supabase.svg' },
 ];
 
 /** Skill cards interaktif di homepage */
