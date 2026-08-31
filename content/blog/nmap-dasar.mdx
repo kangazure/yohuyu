@@ -1,0 +1,137 @@
+---
+title: "Nmap: Network Discovery dan Port Scanning"
+description: "Belajar Nmap secara praktis: ping sweep, port scan, deteksi versi layanan, script engine, dan output yang perlu kamu perhatikan."
+category: "CYBER SECURITY"
+tags: [nmap, port scanning, network discovery, osint]
+date: "2026-08-01"
+updatedAt: "2026-08-01"
+author: "Riko Ardianto"
+cover: "/images/blog/security.svg"
+---
+
+Nmap (Network Mapper) adalah tool open-source untuk menemukan perangkat di jaringan dan memetakan layanan mereka. Ini tool nomor satu untuk tahap *information gathering* — dan salah satu yang paling sering disalahgunakan juga.
+
+Pakai di jaringan sendiri atau dengan izin tertulis. Tidak ada pengecualian.
+
+## Instalasi
+
+```bash
+# Debian/Ubuntu/Kali
+sudo apt install -y nmap
+
+# Windows — download installer dari nmap.org, atau via winget
+winget install Insecure.Nmap
+```
+
+Cek versi:
+
+```bash
+nmap --version
+```
+
+## Tahap 1: Discovery — Siapa yang Hidup?
+
+Sebelum scan port, cari tahu host yang aktif. `-sn` (ping scan) tidak menyentuh port sama sekali:
+
+```bash
+# seluruh subnet
+nmap -sn 192.168.1.0/24
+
+# daftar IP spesifik
+nmap -sn 192.168.1.1-50
+
+# hostname
+nmap -sn rikoardianto.web.id
+```
+
+Output `Host is up` menandakan perangkat merespons — biasanya dari ICMP echo, TCP 443/80, atau ARP (untuk jaringan lokal).
+
+## Tahap 2: Port Scan — Layanan Apa yang Terbuka?
+
+Scan default = 1000 port TCP paling umum. Sintaks intinya:
+
+```bash
+nmap 192.168.1.10
+
+# range port tertentu
+nmap -p 1-1024 192.168.1.10
+
+# semua 65535 port (lambat, tapi lengkap)
+nmap -p- 192.168.1.10
+```
+
+Status port yang mungkin muncul:
+
+| Status | Arti |
+| --- | --- |
+| open | Ada layanan mendengarkan (terbuka) |
+| closed | Port terjangkau, tidak ada layanan |
+| filtered | Diblokir firewall — tidak ada respons |
+| unfiltered | Terjangkau, tapi status belum jelas |
+
+## Tahap 3: Deteksi Versi dan OS
+
+`-sV` memfingerprint versi layanan — informasi emas untuk mencari kerentanan:
+
+```bash
+nmap -sV 192.168.1.10
+
+# + deteksi OS (butuh root di Linux)
+sudo nmap -O 192.168.1.10
+
+# gabungan agresif (versi, OS, script default, traceroute) — cukup berisik!
+sudo nmap -A 192.168.1.10
+```
+
+Hati-hati dengan `-A`: ia mengirim banyak probe dan mudah terdeteksi IDS/IPS.
+
+## NSE: Script Engine Nmap
+
+Nmap punya pustaka script untuk tugas spesifik:
+
+```bash
+# script default
+nmap -sC 192.168.1.10
+
+# cari script yang relevan
+ls /usr/share/nmap/scripts/ | grep http
+
+# jalankan script tertentu (misal cek vuln SMB)
+nmap -p 445 --script smb-vuln-* 192.168.1.10
+
+# cek user enum SSH
+nmap -p 22 --script ssh-auth-methods 192.168.1.10
+```
+
+NSE membuat Nmap melesat dari sekadar "port opener" jadi tool assessment.
+
+## Scan yang Lebih Senyap (dan Kapan Perlu)
+
+`-sS` (SYN scan) tidak menyelesaikan handshake — setengah koneksi, lebih cepat dan jarang tercatat aplikasi:
+
+```bash
+sudo nmap -sS -p 80,443 192.168.1.10
+```
+
+Perlu diingat: "stealth" itu relatif — firewall modern tetap melihatnya. Jangan pernah menganggap scan tersembunyi sebagai alasan untuk memakai di jaringan orang lain.
+
+## Menyimpan Hasil — Rutinitas Wajib
+
+Hasil scan hilang sia-sia kalau tidak disimpan. Tiga format sekaligus:
+
+```bash
+# normal, XML, dan grep-able
+nmap -oN scan.txt -oX scan.xml -oG scan.gnmap 192.168.1.0/24
+```
+
+Untuk laporan, XML bisa dikonversi ke HTML dengan `xsltproc`:
+
+```bash
+xsltproc scan.xml -o scan.html
+```
+
+## Kesimpulan
+
+Alur kerja Nmap selalu bertahap: discovery (`-sn`) → port scan → versi layanan (`-sV`) → script (`-sC`/NSE). Mulai dari target kecil di lab, biasakan menyimpan output, dan baca hasilnya dengan konteks — port 22 terbuka di server produksi itu normal, tapi di PC kantor patut dipertanyakan.
+
+*Lanjut baca: [Wireshark: Melihat Isi Traffic](/blog/wireshark-dasar) dan [Kali Linux](/blog/kali-linux).*

@@ -1,0 +1,170 @@
+---
+title: "Docker untuk Pemula: Kontainer dalam 30 Menit"
+description: "Belajar Docker dari nol: image vs container, Dockerfile, volume, network, docker-compose — langsung dengan contoh proyek nyata."
+category: "DOCKER"
+tags: [docker, container, dockerfile, docker-compose, devops]
+date: "2026-07-23"
+updatedAt: "2026-07-23"
+author: "Riko Ardianto"
+cover: "/images/blog/devops.svg"
+---
+
+Docker memecahkan masalah klasik: *"di laptop saya jalan kok"*. Dengan kontainer, aplikasi dibungkus bersama lingkungannya — dependency, konfigurasi, versi library — sehingga hasilnya sama di laptop, server, maupun cloud.
+
+## Image vs Container
+
+Dua konsep yang wajib dibedakan sejak awal:
+
+- **Image** — cetak biru yang bisa dibaca. Statis, tidak berubah. Seperti installer aplikasi.
+- **Container** — instance berjalan dari image. Bisa start, stop, dan bisa dibuat sebanyak yang kamu mau.
+
+```text
+Image (nextjs:latest)
+   ├── Container A  (port 3000)
+   ├── Container B  (port 3001)
+   └── Container C  (mengambil image yang sama)
+```
+
+Image didownload dari registry (default: Docker Hub), container dijalankan dari image.
+
+## Perintah Pertama
+
+```bash
+# cek versi
+docker --version
+
+# jalankan nginx, map port 80 host → 80 container
+docker run -d -p 8080:80 --name web nginx:alpine
+
+# lihat container berjalan
+docker ps
+
+# lihat log realtime
+docker logs -f web
+
+# masuk ke shell container
+docker exec -it web sh
+
+# stop & hapus
+docker stop web && docker rm web
+```
+
+Jangan lupa `docker ps -a` — dia menampilkan juga container yang sudah stop.
+
+## Menulis Dockerfile
+
+Proyek kecil Node.js contohnya:
+
+```dockerfile
+# 1. base image
+FROM node:22-alpine
+
+# 2. kerja di direktori ini
+WORKDIR /app
+
+# 3. install dependency dulu (cache layer lebih baik)
+COPY package*.json ./
+RUN npm ci --only=production
+
+# 4. salin source
+COPY . .
+
+# 5. expose port
+EXPOSE 3000
+
+# 6. perintah jalan
+CMD ["node", "server.js"]
+```
+
+Build dan jalankan:
+
+```bash
+docker build -t app-ku .
+docker run -d -p 3000:3000 app-ku
+```
+
+**Pola penting**: `npm ci` dipisah dari `COPY . .` supaya perubahan source tidak memicu instal dependency ulang — layer yang tidak berubah memakai cache.
+
+## Volume: Data yang Bertahan
+
+Container kalau dihapus, datanya ikut hilang — kecuali disimpan di volume:
+
+```bash
+# volume bernama
+docker volume create data-ku
+docker run -d -v data-ku:/data --name app-db alpine
+
+# bind mount (folder host langsung)
+docker run -d -v /home/riko/config:/etc/nginx/conf.d nginx
+```
+
+Volume bernama disarankan untuk database; bind mount praktis saat development (edit file host langsung terlihat di container).
+
+## Network: Container Saling Bicara
+
+Container di network yang sama bisa saling memanggil lewat nama:
+
+```bash
+docker network create my-net
+
+docker run -d --network my-net --name redis redis:alpine
+docker run -d --network my-net -p 3000:3000 --name app app-ku
+# dari dalam app: host "redis" langsung nyambung ke container redis
+```
+
+Prinsipnya: **jangan pernah memakai IP container** (berubah-ubah) — pakai nama.
+
+## docker-compose: Semua dalam Satu File
+
+Proyek web + database + cache jadi file YAML:
+
+```yaml
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: rahasia
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+Jalankan semuanya:
+
+```bash
+docker compose up -d
+docker compose logs -f
+docker compose down
+```
+
+`docker compose up -d` adalah perintah paling sering dipakai admin — satu baris menjalankan seluruh stack.
+
+## Workflow Praktis
+
+```bash
+# rebuild setelah ubah source
+docker compose up -d --build
+
+# bersih-bersih: buang container/idle & image tak terpakai
+docker system prune -af
+
+# cek pemakaian disk
+docker system df
+```
+
+## Kesimpulan
+
+Kontainerisasi bukan sekadar tren: ia menyatukan environment. Kuasai alurnya — Dockerfile, image, volume, network, compose — dan kamu sudah punya dasar yang cukup untuk deploy aplikasi apa pun: dari blog sampai [deploy Next.js di Dokploy](/blog/deploy-nextjs-dokploy).
+
+*Lanjut baca: [Deploy Next.js di Dokploy](/blog/deploy-nextjs-dokploy) dan [Linux Networking](/blog/linux-networking-dasar).*

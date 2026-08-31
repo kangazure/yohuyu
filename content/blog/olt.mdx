@@ -1,0 +1,128 @@
+---
+title: "OLT: Otak dari Jaringan Fiber Optik"
+description: "Mengenal OLT secara mendalam: fungsi, tipe port, registrasi ONU, manajemen pelanggan, hingga troubleshooting status ONT."
+category: "GPON / OLT"
+tags: [olt, gpon, onu, registrasi, troubleshooting]
+date: "2026-08-10"
+updatedAt: "2026-08-10"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+Kalau GPON adalah arsitekturnya, **OLT (Optical Line Terminal)** adalah mesin yang menjalankan semuanya. OLT adalah perangkat di sisi provider yang menghubungkan jaringan fiber optik pelanggan dengan jaringan inti (core network) dan internet.
+
+Semua keputusan — siapa boleh online, berapa bandwidth, layanan apa yang aktif — diatur di OLT.
+
+## Peran OLT Secara Keseluruhan
+
+- **Menghosting port PON** — tiap port PON menuju satu splitter dan melayani puluhan ONU.
+- **Menjadwalkan upstream** — memberi timeslot ke tiap ONU supaya tidak tabrakan di satu fiber.
+- **Registrasi & otentikasi ONU** — menentukan ONU mana yang diizinkan naik.
+- **Menghubungkan ke jaringan inti** — lewat uplink ethernet (GE/10GE) ke router core.
+- **Mengelola layanan pelanggan** — mapping service flow, VLAN, dan bandwidth per pelanggan.
+
+## Anatomi OLT
+
+Secara fisik, OLT modern (misal ZTE C320/C600, Huawei MA5608T/MA5800) terdiri dari:
+
+- **Chassis** — kerangka dengan slot kartu.
+- **GPON line card** — kartu berisi 8/16 port PON. Contoh: ZTE GTGO memiliki 8 port PON per kartu.
+- **Switch/control card** — otak, tempat software OLT dan uplink.
+- **Uplink port** — biasanya 10GE untuk naik ke core.
+
+```text
+          ┌───────────── OLT ─────────────┐
+          │  [Slot 1: GPON card]  8 PON port │
+ Internet──[Slot 2: Control card]          │── fiber → splitter → ONU
+          └─────────────────────────────┘
+```
+
+Kapasitas: satu OLT kelas menengah bisa melayani ribuan pelanggan (misal 8 kartu × 8 port × 64 ONU ≈ 4000+).
+
+## Registrasi ONU: Cara ONU Diizinkan Masuk
+
+Saat ONU pertama nyala, dia "memanggil" OLT. OLT tidak akan melayaninya sebelum terdaftar. Dua metode umum:
+
+1. **Registrasi otomatis (autodiscovery)** — ONU yang belum dikenal muncul di daftar "unregistered ONT". Admin tinggal mencentang dan memberi nama pelanggan.
+2. **Registrasi manual** — masukkan SN (serial number) ONU ke OLT secara manual dulu.
+
+Contoh alur di CLI ala ZTE (disederhanakan):
+
+```text
+ZXAN(config)# interface gpon-olt_1/1/1
+ZXAN(config-gpon)# onu 1 sn ZTEGC12345678
+ZXAN(config-gpon)# onu 1 name PELANGGAN-001
+ZXAN(config-gpon)# onu 1 reg-time 30
+```
+
+Setelah terdaftar, ONU dapat IP manajemen dari OLT dan mulai beroperasi.
+
+## Status ONT: Bahasa yang Harus Kamu Fasih
+
+Di OLT, tiap ONU punya status. Ini yang paling sering dilihat saat trouble:
+
+| Status | Arti |
+| --- | --- |
+| O1 (Initial) | ONU baru nyala, belum sinkron |
+| O2 (Standby) | ONU dapat upstream, belum terautentikasi |
+| O3 (Serial Number) | Proses otentikasi SN berlangsung |
+| O4 (Ranging) | OLT mengukur jarak & mengatur equalization delay |
+| O5 (Operation) | **Normal** — ONU aktif dan melayani |
+| O6 (POPUP) | ONU lepas perlahan; sering karena level daya drop |
+| O7 (Emergency) | Gangguan keamanan/emergency stop |
+
+Kalau ONU stuck di O1-O4, masalahnya biasanya fisik (cahaya) atau otentikasi (SN salah). Kalau sudah O5 tapi internet mati, masalah pindah ke service mapping atau sisi router.
+
+## Mapping Layanan dan Bandwidth
+
+Setiap pelanggan butuh tiga hal di OLT:
+
+```text
+1. GEM Port      → jalur data ONU (bisa beberapa untuk triple-play)
+2. T-CONT        → wadah bandwidth upstream
+3. Service Flow  → menghubungkan GEM port ke VLAN layanan
+```
+
+Contoh minimal (CLI ZTE, disederhanakan):
+
+```text
+ZXAN(config-gpon)# onu 1 gemport 1 tcont 1
+ZXAN(config-gpon)# onu 1 gemport 1 map vlan 100
+ZXAN(config-gpon)# onu 1 gemport 1 flow 1
+```
+
+VLAN 100 di sini adalah VLAN layanan internet — nantinya diteruskan router core ke BNG/RADIUS untuk otentikasi PPPoE/DHCP pelanggan.
+
+Limitasi kecepatan paket (bandwidth profile) juga di-apply di sini:
+
+```text
+# profil 50 Mbps down / 25 Mbps up
+ZXAN(config)# pon-onu-mng profile bandwidth BW_50_25
+ZXAN(config)# pon-onu-mng profile bandwidth BW_50_25 fixed-assured down 50000 up 25000
+```
+
+## Troubleshooting Cepat
+
+Urutan debugging koneksi ONU yang erornya paling umum:
+
+```bash
+# 1. cek status ONU — O5 berarti fisik & otentikasi beres
+ZXAN# show pon onu state gpon-olt_1/1/1
+
+# 2. cek level daya — Rx ONU harus di range masuk akal (-8 s/d -25 dBm)
+ZXAN# show pon power onu gpon-olt_1/1/1 1
+
+# 3. cek mapping service flow
+ZXAN# show onu gemport gpon-olt_1/1/1 1
+
+# 4. cek DHCP/PPPoE di sisi BNG — kalau O5 + mapping OK tapi tak internet,
+#    masalahnya di radius/vlan — bukan OLT
+```
+
+Kalau Rx power ONU normal tapi status tidak mau O5, cek SN registrasi — kesalahan satu huruf SN saja membuat ONU tidak pernah naik.
+
+## Kesimpulan
+
+OLT adalah tulang punggung layanan fiber: tempat registrasi ONU, penjadwalan upstream, dan mapping layanan. Karier di ISP fiber hampir pasti menyentuh OLT — entah untuk provisioning pelanggan baru, menaikkan bandwidth, atau debug ONU yang mogok. Kuasai status O1-O7 dan alur registrasi, dan kamu sudah menguasai 80% pekerjaan harian NOC fiber.
+
+*Lanjut baca: [GPON: Teknologi di Baliknya](/blog/gpon) dan [Dasar MikroTik](/blog/mikrotik-dasar).*

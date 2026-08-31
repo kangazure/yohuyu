@@ -1,0 +1,144 @@
+---
+title: "Deploy Next.js di Dokploy: Panduan Lengkap"
+description: "Cara deploy aplikasi Next.js ke VPS menggunakan Dokploy — dari docker-compose, environment variables, sampai reverse proxy dan HTTPS otomatis."
+category: "DEVOPS"
+tags: [deploy, nextjs, dokploy, docker, vps]
+date: "2026-07-20"
+updatedAt: "2026-07-20"
+author: "Riko Ardianto"
+cover: "/images/blog/devops.svg"
+---
+
+Dokploy adalah platform self-hosted bergaya Vercel/Heroku yang bisa kamu jalankan di VPS sendiri: deploy dari Git, docker-compose custom, reverse proxy otomatis, dan SSL gratis — semua via dashboard.
+
+Artikel ini membahas deployment Next.js (App Router) ke Dokploy dari awal. Ini juga cara blog ini dideploy.
+
+## Prasyarat
+
+- VPS (2 GB RAM cukup untuk satu-dua aplikasi kecil)
+- Domain sudah diarahkan ke IP VPS
+- Docker & Docker Compose di VPS
+- Project Next.js di Git (GitHub/GitLab)
+
+## Siapkan Dockerfile di Project
+
+Dokploy mendukung build otomatis, tapi Dockerfile eksplisit lebih bisa diprediksi. Untuk Next.js standalone:
+
+```dockerfile
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+# hasil build standalone (lihat outputStandalone di next.config)
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+Jangan lupa di `next.config.ts`:
+
+```ts
+const nextConfig = {
+  output: 'standalone',
+};
+export default nextConfig;
+```
+
+## Buat docker-compose di Dokploy
+
+Di dashboard Dokploy:
+
+1. Buat project baru → pilih **Docker Compose** (bukan Nixpacks — lebih kendali).
+2. Tempel compose:
+
+```yaml
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SITE_URL=https://domainmu.com
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+3. Di tab **Environment**, isi `DB_PASSWORD` (jangan pernah menempel secret langsung di file compose).
+
+## Build, Domain, dan HTTPS
+
+- Hubungkan repository Git → Dokploy akan clone dan build.
+- Aplikasi selesai di port `3000` → tambahkan **domain** (misal `app.domainmu.com`).
+- Aktifkan **HTTPS** — Dokploy memakai Let's Encrypt, sertifikat diurus otomatis dan diperbarui.
+
+Sekarang akses `https://app.domainmu.com` — kalau muncul situsmu, deployment sukses.
+
+## Environment Variables yang Sering Keteteran
+
+Ini penyebab paling umum "build OK tapi app error":
+
+| Variabel | Masalah khas |
+| --- | --- |
+| `NEXT_PUBLIC_*` | Wajib ada **saat build** — nilainya di-inline ke JS |
+| `DATABASE_URL` | Hanya dibaca runtime; pastikan host-nya nama service compose (`db`), bukan localhost |
+| `NEXTAUTH_SECRET` | Khusus NextAuth — harus konsisten antar restart |
+
+Aturannya: vars yang dipakai komponen client harus `NEXT_PUBLIC_` dan tersedia saat `npm run build`.
+
+Verifikasi: apus cache browser, cek `view-source` — nilai `NEXT_PUBLIC_*` terlihat di HTML; kalau placeholder, berarti build tidak melihat env tersebut.
+
+## Troubleshooting Umum
+
+```bash
+# log aplikasi dari server
+docker compose -f /path/project logs -f web
+
+# masuk ke container
+docker exec -it <container-id> sh
+
+# build ulang dari source baru
+docker compose up -d --build
+```
+
+**Database reset**: hapus volume, jangan sekadar restart:
+
+```bash
+docker compose down -v   # HATI-HATI: menghapus semua data volume
+```
+
+**Port bentrok**: kalau port 3000 dipakai app lain, ganti mapping di compose (`"3001:3000"`) dan sesuaikan domain.
+
+## Update Aplikasi
+
+Alur deploy versi baru di Dokploy: push ke Git → buka dashboard → tombol **Deploy**. Dokploy menarik commit terbaru dan membangun ulang image. Untuk otomatis penuh, aktifkan webhook Git di pengaturan project.
+
+## Kesimpulan
+
+Deploy Next.js di Dokploy = Dockerfile standalone + compose + domain + env yang benar. Sekali pola ini dikuasai, kamu bisa deploy aplikasi apa pun di VPS sendiri — tanpa langganan PaaS, dan dengan kontrol penuh. Mulai dari proyek kecil dulu, lalu naik kelas ke multi-service.
+
+*Lanjut baca: [Docker untuk Pemula](/blog/docker-dasar) dan [Linux Networking](/blog/linux-networking-dasar).*
