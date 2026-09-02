@@ -55,9 +55,11 @@ const BRAND_COLOR = {
 /** brand yang tidak ada di simple-icons → ambil logo resmi dari Wikimedia */
 const WIKI_BRANDS = [
   ['canva', 'Canva_logo.svg', '#00c4cc'],
-  ['capcut', 'CapCut_logo.svg', '#ffffff'],
+  // CapCut_logo.svg di Wikimedia isinya PNG embed yang terpotong (tidak valid) —
+  // fallback ke wordmark resmi "CapCut".
+  ['capcut', null, '#ffffff'],
   ['viu', 'Viu_logo.svg', '#ff7733'],
-  ['iqiyi', 'https://upload.wikimedia.org/wikipedia/commons/e/eb/IQiyi_logo.svg', '#00be06'],
+  ['iqiyi', 'https://cdn.worldvectorlogo.com/logos/iqiyi-1.svg', '#00be06'],
   ['youku', 'https://cdn.worldvectorlogo.com/logos/youku.svg', '#00a0e9'],
 ];
 
@@ -111,7 +113,8 @@ function embedSvg({ inner, x, y, w, h, color, title }) {
   const scale = 68 / Math.max(w, h);
   const tx = (128 - w * scale) / 2 - x * scale;
   const ty = (128 - h * scale) / 2 - y * scale;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="${title}">
+  const clean = normalizeInner(inner);
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="${title}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#171f38"/>
@@ -125,7 +128,7 @@ function embedSvg({ inner, x, y, w, h, color, title }) {
   <rect width="128" height="128" rx="28" fill="url(#bg)"/>
   <rect width="128" height="128" rx="28" fill="url(#halo)"/>
   <g transform="translate(${tx.toFixed(2)} ${ty.toFixed(2)}) scale(${scale.toFixed(3)})">
-${inner}
+${clean}
   </g>
 </svg>
 `;
@@ -158,6 +161,13 @@ function safeColor(fill, override, brand) {
   const color = override ?? fill ?? BRAND_COLOR[brand] ?? '#ffffff';
   const dark = ['#000000', '#0f0f0f', '#111111', '#293239'];
   return dark.includes(color.toLowerCase()) ? '#ffffff' : color;
+}
+
+/** hilangkan atribut namespace lama & seragamkan href (SVG2) — mencegah referensi putus di <img> */
+function normalizeInner(inner) {
+  return inner
+    .replace(/\sxlink:href=/g, ' href=')
+    .replace(/\sxmlns\S*="[^"]*"/g, '');
 }
 
 function tileSvg({ d, color, title }) {
@@ -221,12 +231,18 @@ async function main() {
 
   // brand dengan glyph resmi dari Wikimedia (canva, capcut, viu, iqiyi, youku)
   for (const [name, file, tint] of WIKI_BRANDS) {
-    const svg = await fetchWikimedia(file);
-    if (svg) {
-      await writeFile(join(OUT_DIR, `${name}.svg`), embedSvg({ ...svg, color: tint, title: name }));
-      results.push(`ok    ${name}.svg  (wikimedia ${file})`);
+    if (!file) {
+      // tanpa sumber glyph valid → wordmark resmi
+      await writeFile(join(OUT_DIR, `${name}.svg`), wordmarkSvg({ text: name === 'capcut' ? 'CapCut' : name, color: tint }));
+      results.push(`ok    ${name}.svg  (wordmark resmi — sumber PNG rusak)`);
     } else {
-      results.push(`FAIL  ${name}.svg  (wikimedia ${file} tidak tersedia)`);
+      const svg = await fetchWikimedia(file);
+      if (svg) {
+        await writeFile(join(OUT_DIR, `${name}.svg`), embedSvg({ ...svg, color: tint, title: name }));
+        results.push(`ok    ${name}.svg  (wikimedia ${file})`);
+      } else {
+        results.push(`FAIL  ${name}.svg  (wikimedia ${file} tidak tersedia)`);
+      }
     }
     // jeda ringan biar tidak kena rate-limit
     await new Promise((r) => setTimeout(r, 1500));
