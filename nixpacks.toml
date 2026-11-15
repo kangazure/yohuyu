@@ -1,0 +1,6 @@
+# Safety net kalau Dokploy masih memakai Nixpacks:
+# buat Next.js 16, paksa Node >= 20.9 (di sini 22) — Nixpacks defaultnya
+# memilih Node 18 yang membuat `next build` gagal.
+# Catatan: dengan Dockerfile di root, lebih baik set Build Type = Dockerfile di UI Dokploy.
+[variables]
+NODE_VERSION = "22"

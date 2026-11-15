@@ -1,0 +1,106 @@
+---
+title: "VLAN: Memisahkan Jaringan Tanpa Menambah Kabel"
+description: "Apa itu VLAN, cara kerja tag 802.1Q, jenis-jenis VLAN, dan contoh konfigurasi access/trunk di switch dan router."
+category: "NETWORKING"
+tags: [vlan, 802.1q, switch, trunk, access port]
+date: "2026-08-19"
+updatedAt: "2026-08-19"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+VLAN (Virtual Local Area Network) memisahkan satu switch fisik menjadi beberapa jaringan logis. PC di VLAN 10 tidak akan langsung bicara dengan PC di VLAN 20 — seolah-olah mereka ada di switch berbeda.
+
+Fungsinya mirip subnetting, tapi dilakukan di lapisan switch, bukan router.
+
+## Kenapa Perlu VLAN?
+
+Beberapa alasan paling umum:
+
+- **Keamanan** — lalu lintas antar departemen dipisah; PC keuangan tidak bisa mengakses server kamera.
+- **Efisiensi broadcast** — broadcast domain dipecah, jaringan tidak "ramai" oleh paket yang tidak penting.
+- **Fleksibilitas** — satu switch melayani banyak jaringan, tanpa fisik kabel tambahan.
+- **Prioritas layanan** — VoIP, IPTV, dan data bisnis bisa diberi treatment berbeda.
+
+## Tag 802.1Q: Bagaimana Switch Tahu?
+
+Ketika sebuah frame masuk ke port switch yang punya VLAN, switch menyisipkan **tag** 12-bit (nomor VLAN 1-4094) di dalam frame Ethernet. Standar ini disebut **IEEE 802.1Q**.
+
+```text
+Tanpa tag (untagged frame):
+[ MAC tujuan | MAC sumber | EtherType | Payload ]
+
+Dengan tag 802.1Q:
+[ MAC tujuan | MAC sumber | VLAN Tag (12 bit) | EtherType | Payload ]
+```
+
+Tujuan dan sumber MAC tidak berubah — yang disisipkan hanya label VLAN di antara keduanya.
+
+## Access Port vs Trunk Port
+
+Ini dua konsep yang wajib hafal:
+
+- **Access port** — port untuk perangkat akhir (PC, printer, kamera). Frame dikirim tanpa tag; switch otomatis menandainya dengan PVID port tersebut.
+- **Trunk port** — port penghubung antar switch (atau ke router). Membawa banyak VLAN sekaligus, semua frame diberi tag.
+
+```text
+PC (VLAN 10) ──access── [Switch A] ──trunk── [Switch B] ──access── Server (VLAN 10)
+
+Trunk membawa: VLAN 10 (tag 10), VLAN 20 (tag 20), VLAN 30 (tag 30)
+```
+
+Kenapa trunk perlu tag? Karena satu kabel membawa tiga jaringan — tanpa tag, switch penerima tidak tahu frame itu milik jaringan mana.
+
+## Native VLAN — Kasus Khusus
+
+Native VLAN (default: VLAN 1) dikirim **tanpa tag** di port trunk. Supaya dua switch saling memahami, native VLAN di kedua ujung harus sama. Praktik keamanan menyarankan mengganti native VLAN dari 1 ke nomor lain yang tidak dipakai — VLAN 1 sering jadi target serangan (VLAN hopping).
+
+## Contoh Konfigurasi
+
+### Di switch (SwitchOS / Cisco-style)
+
+```text
+vlan 10
+ name DATA
+!
+vlan 20
+ name VOICE
+!
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+!
+interface GigabitEthernet0/24
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+```
+
+### Di router MikroTik (VLAN interface)
+
+```bash
+# buat interface VLAN di atas ether1 (trunk dari switch)
+/interface vlan add name=vlan10 vlan-id=10 interface=ether1
+/interface vlan add name=vlan20 vlan-id=20 interface=ether1
+
+# beri IP tiap VLAN
+/ip address add address=192.168.10.1/24 interface=vlan10
+/ip address add address=192.168.20.1/24 interface=vlan20
+
+# firewall antar VLAN: blok semua kecuali yang diizinkan
+/ip firewall filter add chain=forward src-address=192.168.10.0/24 dst-address=192.168.20.0/24 action=drop
+```
+
+Dengan pola ini, satu router melayani banyak VLAN — dikenal sebagai **router-on-a-stick** karena semua antar-VLAN traffic melewati jalur trunk yang sama.
+
+## Kesalahan Umum
+
+- Lupa menambahkan VLAN ke daftar trunk allowed → perangkat di sisi lain sama sekali tidak terhubung.
+- Native VLAN beda di dua ujung trunk → frame tanpa tag nyasar ke VLAN lain.
+- Memberi IP di physical ethernet yang sudah dipakai VLAN → konflik routing.
+- Tidak ada inter-VLAN routing → PC VLAN 10 tidak bisa ping VLAN 20, dan ini bukan bug: memang desainnya begitu.
+
+## Kesimpulan
+
+VLAN memindahkan batas jaringan dari fisik ke logis: satu switch, banyak jaringan. Pahami access/trunk dan tag 802.1Q, sisanya tinggal konfigurasi. Di jaringan ISP rumah, VLAN sering dipakai untuk memisahkan internet, IPTV, dan manajemen ONU dalam satu kabel fiber.
+
+*Lanjut baca: [Dasar MikroTik](/blog/mikrotik-dasar) dan [Subnetting Praktis](/blog/subnetting).*

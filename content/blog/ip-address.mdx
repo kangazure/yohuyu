@@ -1,0 +1,97 @@
+---
+title: "IP Address: Pengertian, Kelas, dan Jenisnya"
+description: "Belajar IP address dari nol: IPv4 vs IPv6, kelas A-B-C, public vs private, dan kenapa 192.168.1.1 ada di hampir semua rumah."
+category: "NETWORKING"
+tags: [ip address, ipv4, ipv6, subnet, private ip]
+date: "2026-08-25"
+updatedAt: "2026-08-25"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+IP address adalah alamat logis perangkat di jaringan — seperti alamat rumah, tapi untuk komputer. Setiap paket data yang dikirim lewat internet selalu mencantumkan IP tujuan supaya sampai ke tempat yang benar.
+
+## IPv4 vs IPv6
+
+Ada dua versi IP yang dipakai saat ini:
+
+- **IPv4** — 32 bit, ditulis empat oktet: `192.168.1.1`. Total alamat sekitar 4,3 miliar. Jumlah ini sudah habis sejak 2019, makanya muncul IPv6.
+- **IPv6** — 128 bit, ditulis heksadesimal dengan titik dua: `2001:db8::1`. Jumlahnya praktis tidak terbatas.
+
+Meski IPv6 sudah umum di operator seluler, mayoritas jaringan kantor dan rumahan masih memakai IPv4 — terutama karena perangkat lama dan kebiasaan konfigurasi.
+
+## Struktur IPv4
+
+IPv4 terdiri dari dua bagian:
+
+1. **Network portion** — menunjukkan jaringan mana perangkat berada.
+2. **Host portion** — menunjukkan perangkat mana di dalam jaringan itu.
+
+Pembatasnya ditentukan oleh **subnet mask**. Contoh:
+
+```text
+IP:         192.168.1.10
+Mask:       255.255.255.0  (/24)
+Network:    192.168.1.0
+Host range: 192.168.1.1 - 192.168.1.254
+Broadcast:  192.168.1.255
+```
+
+Notasi `/24` adalah cara singkat menulis mask: jumlah bit 1 pada mask (255.255.255.0 = 24 bit).
+
+## Kelas IP Address
+
+Dulu IPv4 dibagi dalam kelas. Kamu tetap perlu tahu karena dipakai di banyak literatur dan soal sertifikasi:
+
+| Kelas | Rentang awal | Pemakaian |
+| --- | --- | --- |
+| A | `1.0.0.0` – `126.255.255.255` | Jaringan sangat besar |
+| B | `128.0.0.0` – `191.255.255.255` | Jaringan menengah |
+| C | `192.0.0.0` – `223.255.255.255` | Jaringan kecil |
+| D | `224.0.0.0` – `239.255.255.255` | Multicast |
+| E | `240.0.0.0` – `255.255.255.255` | Riset |
+
+Dalam praktik modern, konsep kelas sudah digantikan **CIDR** (Classless Inter-Domain Routing) — itu istilah untuk penulisan `/24`, `/27`, `/30` yang fleksibel.
+
+## Public vs Private IP
+
+Tidak semua IP bisa dipakai bebas. Ada blok **private** yang khusus untuk jaringan internal dan tidak boleh di-routing di internet:
+
+```text
+Kelas A: 10.0.0.0/8        → 10.0.0.0 – 10.255.255.255
+Kelas B: 172.16.0.0/12     → 172.16.0.0 – 172.31.255.255
+Kelas C: 192.168.0.0/16    → 192.168.0.0 – 192.168.255.255
+```
+
+Itulah mengapa router rumah memakai `192.168.1.1` — alamat itu bebas dipakai siapa saja di jaringan pribadinya. Sedangkan **public IP** dibeli/disewa dari ISP dan unik di seluruh internet.
+
+Perangkat di rumahmu mendapat IP private dari router lewat DHCP, lalu berbagi satu public IP — mekanisme ini disebut **NAT** (Network Address Translation).
+
+## IP Statis vs Dinamis
+
+- **Dinamis** — diberikan otomatis oleh server DHCP, bisa berubah sewaktu-waktu. Default untuk perangkat rumahan.
+- **Statis** — di-set manual, tidak berubah. Dipakai untuk server, printer jaringan, dan perangkat infrastruktur.
+
+Di MikroTik, konfigurasi statis lewat DHCP reservation lebih rapi daripada manual sepenuhnya:
+
+```bash
+# contoh di router MikroTik (RouterOS CLI)
+/ip dhcp-server lease add address=192.168.1.50 mac-address=AA:BB:CC:11:22:33
+```
+
+## Cara Cek IP Sendiri
+
+```bash
+# IP private (Linux)
+ip -4 addr show | grep inet
+
+# IP public — lewat situs atau DNS
+curl ifconfig.me
+dig +short myip.opendns.com @resolver1.opendns.com
+```
+
+## Kesimpulan
+
+IP address adalah dasar dari semua komunikasi jaringan: IPv4 masih mendominasi, private IP memakai blok khusus, dan subnet mask menentukan ukuran jaringan. Pahami konsep ini sebelum masuk ke subnetting atau konfigurasi router.
+
+*Lanjut baca: [Subnetting dengan Studi Kasus](/blog/subnetting) dan [Dasar MikroTik](/blog/mikrotik-dasar).*

@@ -1,0 +1,98 @@
+---
+title: "Kali Linux: Toolkit Keamanan dalam Satu Sistem"
+description: "Mengenal Kali Linux: cara install yang benar, struktur tool, pembaruan sistem, dan etika penggunaannya untuk belajar keamanan."
+category: "KALI LINUX"
+tags: [kali linux, ethical hacking, virtualbox, tools]
+date: "2026-08-04"
+updatedAt: "2026-08-04"
+author: "Riko Ardianto"
+cover: "/images/blog/linux.svg"
+---
+
+Kali Linux adalah distribusi Linux berbasis Debian yang dikemas khusus untuk security testing. Bawaan 600+ tool — dari scanning, exploit, forensik, sampai wireless attack — siap pakai.
+
+Yang perlu diingat sejak awal: Kali bukan OS harian. Ia adalah kotak alat medis, bukan rumah tinggal.
+
+## Kenapa Tidak Dipakai Sehari-hari?
+
+Kali default-nya **single user root** dan tanpa perlindungan yang biasa ada di distro desktop. Browsing sembarangan dari Kali sama seperti mengoperasi sambil makan di ruang operasi. Pola penggunaannya juga beda: antisipasi menginstall Kali dengan tujuan "buat belajar" — tapi nyatanya dipakai masih Windows/macOS sebagai pekerjaan harian, Kali cuma dipanggil saat uji keamanan.
+
+## Instalasi yang Benar: Virtual Machine Dulu
+
+Untuk belajar, instal di VM — VM mati tidak apa-apa, host tetap aman:
+
+1. Unduh image Kali dari situs resmi: **kali.org** (hanya dari sana — hindari mirror mencurigakan).
+2. Buat VM (VirtualBox/VMware): minimal 2 GB RAM, 20 GB disk.
+3. Pilih image `kali-linux-...-vmware-amd64.7z` atau install dari ISO.
+4. Setelah boot, login dengan user yang dibuat saat install, lalu perbarui:
+
+```bash
+sudo apt update && sudo apt full-upgrade -y
+```
+
+Jangan gunakan `-y` tanpa membaca dulu apa yang akan di-upgrade pada sistem produksi — untuk VM belajar ini aman saja.
+
+## Struktur Menu yang Perlu Kamu Kenal
+
+Tool Kali dikelompokkan rapi di menu (Applications):
+
+```text
+01 - Information Gathering    → nmap, theHarvester, whois
+02 - Vulnerability Analysis   → nikto, wapiti, searchsploit
+03 - Web Application Analysis → burpsuite, sqlmap, gobuster
+04 - Password Attacks         → hydra, john, hashcat
+05 - Wireless Attacks         → aircrack-ng suite
+06 - Sniffing & Spoofing      → wireshark, bettercap, ettercap
+07 - Exploitation Tools       → metasploit framework
+08 - Forensics                → autopsy, binwalk, foremost
+```
+
+Pemula biasanya mulai dari Information Gathering dan Web Analysis — dua kategori yang paling "ramah" dan legal dipakai di lab sendiri.
+
+## Memperbarui Tool (Cara yang Benar)
+
+Tool keamanan berubah cepat. Update rutin:
+
+```bash
+sudo apt update && sudo apt upgrade -y        # paket biasa
+sudo apt install kali-linux-headless          # tool inti tanpa GUI
+sudo apt install kali-linux-everything        # SEMUA tool (butuh disk besar)
+sudo apt install kali-tools-web               # paket sesua UI kebutuhan
+```
+
+Pilihan terbaik untuk fleksibilitas tanpa boros disk: install kategori sesuai kebutuhan (`kali-tools-*`). Full `kali-linux-everything` bisa memakan 30+ GB.
+
+## Etika: Garis yang Tidak Boleh Dilewati
+
+Kali memberi kekuatan besar. Aturan minimumnya:
+
+- **Izin tertulis** sebelum menguji target apa pun.
+- **Jangan pernah** memakai tool di jaringan yang bukan milikmu — termasuk Wi-Fi tetangga.
+- Gunakan untuk lab pribadi dan platform legal seperti TryHackMe/HackTheBox.
+- Sadar diri dengan UU ITE: scanning tanpa izin pun punya konsekuensi hukum.
+
+## Alur Belajar Pertama di Kali
+
+Jalur yang cukup lengkap untuk minggu pertama:
+
+```bash
+# 1. kenali dirimu sendiri — cek alamat IP dan interface
+ip addr show
+
+# 2. kenali network target lab (VM teman / router sendiri)
+nmap -sn 192.168.1.0/24
+
+# 3. scan port dan versi layanan
+nmap -sV 192.168.1.10
+
+# 4. lihat traffic hidup (buka juga GUI Wireshark)
+sudo tcpdump -i eth0 -c 50
+```
+
+Semua perintah itu legal di labmu. Setelah lancar, lanjut ke [artikel Nmap](/blog/nmap-dasar) dan Wireshark di blog ini.
+
+## Kesimpulan
+
+Kali Linux adalah ekosistem tool keamanan yang lengkap — tapi nilainya ditentukan pemakainya. Install di VM, perbarui rutin, pilih tool sesuai kategori, dan patuhi etika. Yang benar-benar dipelajari bukan list command, tapi cara berpikir: memahami lalu menguji, bukan asal menjalankan.
+
+*Lanjut baca: [Nmap untuk Network Discovery](/blog/nmap-dasar) dan [Dasar Cyber Security](/blog/cyber-security-dasar).*

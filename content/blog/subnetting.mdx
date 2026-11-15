@@ -1,0 +1,115 @@
+---
+title: "Subnetting Praktis: Studi Kasus dari Rumah sampai Kantor"
+description: "Cara menghitung subnet, jumlah host, dan pembagian jaringan dengan studi kasus nyata — pakai notasi CIDR dan tabel yang mudah dipahami."
+category: "NETWORKING"
+tags: [subnetting, cidr, subnet mask, perhitungan jaringan]
+date: "2026-08-22"
+updatedAt: "2026-08-22"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+Subnetting adalah membagi satu jaringan besar menjadi beberapa jaringan kecil (subnet). Manfaatnya: lalu lintas lebih efisien, keamanan lebih rapi, dan alamat IP tidak terbuang percuma.
+
+Kebanyakan orang takut dengan perhitungannya. Padahal dengan satu rumus dan tabel, semuanya gampang.
+
+## Dua Rumus Kunci
+
+Untuk subnet mask dengan prefix `/n`:
+
+```text
+Jumlah subnet  = 2^(jumlah bit pinjaman)
+Jumlah host    = 2^(32 - n) - 2
+```
+
+Dua host dikurangi karena alamat pertama = network address dan terakhir = broadcast, keduanya tidak bisa dipakai perangkat.
+
+## Studi Kasus 1: Rumah (Satu Jaringan)
+
+Jaringan rumah standar: `192.168.1.0/24`.
+
+```text
+Network : 192.168.1.0
+Host    : 2^8 - 2 = 254 → 192.168.1.1 s/d 192.168.1.254
+Broadcast: 192.168.1.255
+```
+
+254 perangkat lebih dari cukup untuk rumah. Routemu biasanya mengambil `192.168.1.1` sebagai gateway.
+
+## Studi Kasus 2: Kantor Kecil (Empat Department)
+
+Kantor dengan 4 divisi — IT, Finance, Marketing, Operasional — masing-masing butuh jaringan terpisah, tapi IP yang tersedia cuma satu blok `192.168.0.0/24`.
+
+Kita butuh 4 subnet → pinjam 2 bit dari host portion:
+
+```text
+Prefix baru = 24 + 2 = /26
+Step tiap subnet = 2^(32-26) = 64
+
+Subnet 1: 192.168.0.0/26     (host 1-62)
+Subnet 2: 192.168.0.64/26    (host 65-126)
+Subnet 3: 192.168.0.128/26   (host 129-190)
+Subnet 4: 192.168.0.192/26   (host 193-254)
+```
+
+Setiap subnet punya 62 host — cukup untuk divisi ukuran sedang.
+
+## Tabel Prefix yang Sering Dipakai
+
+Hafalkan tabel ini, hidupmu lebih mudah:
+
+| Prefix | Mask | Jumlah host |
+| --- | --- | --- |
+| /24 | 255.255.255.0 | 254 |
+| /25 | 255.255.255.128 | 126 |
+| /26 | 255.255.255.192 | 62 |
+| /27 | 255.255.255.224 | 30 |
+| /28 | 255.255.255.240 | 14 |
+| /29 | 255.255.255.248 | 6 |
+| /30 | 255.255.255.252 | 2 |
+
+Prefix `/30` menarik: hanya 2 host — pas untuk koneksi point-to-point antar router.
+
+## Studi Kasus 3: Link Antar Router
+
+Menghubungkan dua router butuh jaringan sendiri yang minim host:
+
+```bash
+# interface router A
+/ip address add address=10.10.10.1/30 interface=ether1
+# interface router B
+/ip address add address=10.10.10.2/30 interface=ether1
+```
+
+```text
+Subnet  : 10.10.10.0/30
+Host 1  : 10.10.10.1  (Router A)
+Host 2  : 10.10.10.2  (Router B)
+Broadcast: 10.10.10.3
+```
+
+Simpel, tidak boros alamat, dan kedua router bisa saling ping.
+
+## Verifikasi dengan Kalkulasi Sendiri
+
+Jangan langsung percaya tabel — hitung manual sekali-sekali. Contoh `/27`:
+
+```text
+2^(32-27) = 32 alamat per subnet
+Host = 32 - 2 = 30
+Network = 0, 32, 64, 96, 128, 160, 192, 224
+```
+
+Kelipatan step = 32. Mudah dicek lewat `ping` atau `ipcalc`:
+
+```bash
+ipcalc 192.168.1.0/27
+```
+
+Outputnya menampilkan network, broadcast, dan rentang host sekaligus.
+
+## Kesimpulan
+
+Subnetting bukan hafalan — ia pola. Tentukan berapa subnet dan berapa host, cari prefix yang cocok, lalu langkahi dengan kelipatan step. Dengan tabel di atas dan satu dua latihan, kamu sudah bisa membagi jaringan rumah dan kantor sendiri: 4 divisi sekalipun.
+
+*Lanjut baca: [VLAN: Memisahkan Jaringan Tanpa Kabel Baru](/blog/vlan) dan [GPON untuk Fisik Fiber](/blog/gpon).*

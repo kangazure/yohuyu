@@ -1,0 +1,12 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --prefer-offline --no-audit --no-fund",
+  "outputDirectory": ".next",
+  "env": {
+    "NEXT_PUBLIC_SITE_URL": "",
+    "NEXT_PUBLIC_SHOPEE_URL": "",
+    "NEXT_PUBLIC_WHATSAPP_URL": ""
+  },
+  "regions": ["sin1"]
+}

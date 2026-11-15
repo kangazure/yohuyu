@@ -1,0 +1,165 @@
+---
+title: "Linux Networking: Perintah dan Konsep yang Wajib Dikuasai"
+description: "Kumpulan perintah networking Linux yang paling sering dipakai: ip, ss, route, resolvectl, iptables — lengkap dengan contoh penggunaan."
+category: "LINUX"
+tags: [linux, networking, ip command, iptables, tcpdump]
+date: "2026-07-26"
+updatedAt: "2026-07-26"
+author: "Riko Ardianto"
+cover: "/images/blog/linux.svg"
+---
+
+Kalau kamu berkecimpung di server, ISP, atau security, Linux networking bukan opsional — itu bahasa kerja. Artikel ini merangkum perintah yang paling sering dipakai beserta pola penggunaannya.
+
+Semua contoh memakai perintah modern (`ip` bukan `ifconfig`), kecuali ada catatan khusus.
+
+## Melihat Kondisi Jaringan
+
+Perintah dasar untuk cek kondisi:
+
+```bash
+# semua interface beserta IP
+ip addr show
+
+# ringkasan
+ip -br addr
+
+# cek interface fisik/kabel
+ethtool eth0
+
+# link layer state (up/down)
+ip link show
+```
+
+Output `ip -br addr` adalah baris pertama yang dilihat saat troubleshooting:
+
+```text
+lo               UNKNOWN 127.0.0.1/8
+eth0             UP      192.168.1.10/24
+```
+
+## Interface dan Alamat
+
+```bash
+# naikkan/turunkan interface
+sudo ip link set eth0 up
+sudo ip link set eth0 down
+
+# tambah alamat IP
+sudo ip addr add 192.168.1.11/24 dev eth0
+
+# hapus alamat
+sudo ip addr del 192.168.1.11/24 dev eth0
+```
+
+Sticky note: perubahan via `ip` **hilang saat reboot**. Untuk permanen, pakai Netplan (Ubuntu) / `interfaces` (Debian) / NetworkManager.
+
+## Routing
+
+```bash
+# tabel routing
+ip route show
+
+# tambah route default
+sudo ip route add default via 192.168.1.1
+
+# route khusus subnet
+sudo ip route add 10.10.0.0/16 via 192.168.1.254
+
+# tes jalur ke tujuan
+ip route get 8.8.8.8
+```
+
+`ip route get` wajib dipakai saat networking aneh — ia menunjukkan interface dan gateway yang akan dipilih, sekaligus alasan (kadang rute lama masih menghantui).
+
+## DNS
+
+```bash
+# resolvconf modern (systemd)
+resolvectl status
+
+# tes resolusi
+dig rikoardianto.web.id
+nslookup rikoardianto.web.id
+
+# tes host spesifik di server DNS tertentu
+dig @1.1.1.1 rikoardianto.web.id
+```
+
+Perhatikan urutan: checking `/etc/resolv.conf` dulu, tapi di sistem modern file itu symlink ke systemd-resolved.
+
+## Port dan Koneksi Aktif
+
+Dulu `netstat`, sekarang `ss` — lebih cepat dan lengkap:
+
+```bash
+# semua socket listening (server yang berjalan)
+ss -tlnp
+
+# koneksi yang sedang aktif
+ss -tunap
+
+# cari siapa yang pegang port 8080
+ss -tlnp | grep 8080
+# atau
+sudo lsof -i :8080
+```
+
+`-t` TCP, `-u` UDP, `-l` listening, `-n` tanpa DNS lookup, `-p` tampilkan proses (butuh root untuk punya orang lain).
+
+## Paket Keluar Masuk: Firewall Minimal
+
+`iptables`/`nftables` adalah topik besar; ini pola dasar yang paling sering dibutuhkan:
+
+```bash
+# lihat rule
+sudo iptables -L -n -v
+
+# buka port 22 (SSH) dari mana saja
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# buka port 80/443 untuk web
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# default deny untuk input baru
+sudo iptables -P INPUT DROP
+```
+
+Aturan di atas harus dijalankan berurutan sesuai pemahamanmu — salah urutan = server hilang dari jaringan (SSH mati). Kalau bekerja di VPS, pastikan ada akses console dulu sebelum bermain default DROP.
+
+## Sniffing Sederhana
+
+```bash
+# lihat header saja, 50 paket
+sudo tcpdump -i eth0 -c 50
+
+# hanya port 443, simpan ke file
+sudo tcpdump -i eth0 -w https.pcap 'tcp port 443'
+
+# semua protokol selain ARP/DNS
+sudo tcpdump -i eth0 'not arp and not port 53'
+```
+
+File `.pcap` bisa dibuka di Wireshark untuk analisis visual — baca [artikel Wireshark](/blog/wireshark-dasar).
+
+## Konektivitas & Performa
+
+```bash
+# tes dasar
+ping -c 4 8.8.8.8
+
+# jalur yang dilalui
+traceroute 8.8.8.8
+
+# cek MTU yang bisa dipakai (biasanya 1500; VPN bisa 1400)
+ping -M do -s 1472 8.8.8.8
+```
+
+`ping -M do -s 1472` menguji MTU 1500 (1472 + 28 byte header). Kalau gagal tapi ukuran normal jalan, ada masalah MTU — umum di VPN/PPPoE.
+
+## Kesimpulan
+
+Delapan grup perintah di atas menutupi 90% aktivitas networking Linux harian: `ip` (alamat & route), `ss` (port), `resolvectl`/`dig` (DNS), `tcpdump` (sniff), dan `iptables` (firewall). Hafalkan pola dasarnya, bukan setiap flag — dokumentasi `man` dan `--help` selalu tersedia untuk sisanya.
+
+*Lanjut baca: [Docker untuk Pemula](/blog/docker-dasar) dan [Deploy Next.js di Dokploy](/blog/deploy-nextjs-dokploy).*

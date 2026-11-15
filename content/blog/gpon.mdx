@@ -1,0 +1,92 @@
+---
+title: "GPON: Teknologi di Balik Internet Fiber Rumah"
+description: "Belajar GPON dari nol: arsitektur point-to-multipoint, OLT dan ONU, splitter, kecepatan down/up, hingga keunggulannya dibanding kabel tembaga."
+category: "GPON / OLT"
+tags: [gpon, fiber optik, onu, olt, splitter, pon]
+date: "2026-08-13"
+updatedAt: "2026-08-13"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+GPON (Gigabit Passive Optical Network) adalah teknologi yang membawa internet fiber sampai ke rumahmu. Sebagian besar ISP fiber di Indonesia — IndiHome, First Media, dan provider lokal — memakainya.
+
+Kata "Passive" penting: antara OLT di机房 dan ONU di rumah pelanggan tidak ada perangkat aktif sama sekali, hanya kabel dan splitter optik.
+
+## Siapa Siapa di Jaringan GPON
+
+Ada tiga pemain utama:
+
+1. **OLT (Optical Line Terminal)** — perangkat di sisi provider (CO/机房). Pusat kendali semua pelanggan yang terhubung di port-nya.
+2. **Splitter optik** — pembagi sinyal 1:N (biasanya 1:16, 1:32, atau 1:64). Pasif, tidak butuh listrik.
+3. **ONU/ONT (Optical Network Unit/Terminal)** — perangkat di rumah pelanggan. ONT adalah ONU dengan fungsi router rumahan.
+
+```text
+[OLT] ── kabel fiber ── [Splitter 1:32] ── fiber ── [ONU Pelanggan 1]
+                                   ├── fiber ── [ONU Pelanggan 2]
+                                   └── fiber ── [ONU Pelanggan 3 ... 32]
+```
+
+Satu port OLT melayani hingga 64 pelanggan (rasio split 1:64). Bandwidth total dibagi bersama di antara mereka.
+
+## Satu Kabel, Dua Arah Data
+
+GPON menggunakan dua panjang gelombang pada satu fiber:
+
+| Arah | Panjang gelombang | Keterangan |
+| --- | --- | --- |
+| Downstream (OLT → ONU) | 1490 nm | Broadcast ke semua ONU |
+| Upstream (ONU → OLT) | 1310 nm | Time-sharing antar ONU |
+
+Downstream bersifat broadcast: semua ONU menerima semua frame, lalu menyaring miliknya dengan GEM Port ID. Untuk keamanan, GPON mengenkripsi traffic (AES-128).
+
+Upstream lebih rumit: ONU-ONU berbagi satu panjang gelombang. OLT memberi **jadwal waktu** (timeslot) ke tiap ONU — inilah mengapa fiber "sepi" terasa sangat cepat: tidak ada tabrakan karena waktunya diatur rapi.
+
+## Kecepatan yang Sesungguhnya
+
+GPON standar: **2.488 Gbps downstream, 1.244 Gbps upstream** — dibagi bersama pelanggan dalam satu PON. Ini alasan paket 100 Mbps di rumahmu terasa stabil: kapasitas fisiknya jauh di atas yang ditawarkan.
+
+Ada juga generasi lanjut:
+
+- **XG-PON / XGS-PON** — 10 Gbps downstream; XGS simetris 10 Gbps.
+- **NG-PON2** — hingga 40-80 Gbps (4 λ 10G).
+
+ISP besar pelan-pelan migrasi ke XGS-PON karena bandwidth per pelanggan makin besar.
+
+## Jarak dan Batas Fisik
+
+- Jarak jangkauan OLT ke ONU: hingga **20 km** (kelas B+) — lebih jauh dari kabel tembaga.
+- Rugi daya (optical budget) dihitung per komponen: konektor ±0.3 dB, splice ±0.1 dB, splitter 1:32 sekitar 17 dB.
+- Level penerimaan ONU yang sehat umumnya **-8 s/d -25 dBm** (tergantung merk). Di bawah -27 dBm mulai sering lepas.
+
+Alat ukurnya:
+
+```bash
+# contoh pada ONU/ONT (interface web/CLI merk tertentu)
+show optical-power
+# output: Rx Power: -18.5 dBm  Tx Power: +1.9 dBm
+```
+
+Nilai Rx yang sangat rendah biasanya berarti splitter jauh, konektor kotor, atau fiber bengkok terlalu tajam.
+
+## Kenapa GPON Menang?
+
+Dibanding kabel tembaga (ADSL/VDSL):
+
+- **Jarak jauh tanpa regenerasi** — 20 km tanpa penguat.
+- **Bandwidth besar** — 2.5 Gbps ke bawah per PON.
+- **Bebas gangguan listrik & interferensi** — tidak ada elektromagnetik seperti tembaga.
+- **Skalabel** — upgrade ke XGS-PON cukup ganti kartu OLT dan ONU, kabel tetap sama.
+
+## Istilah yang Wajib Tahu
+
+- **PON ID / GEM Port** — identitas logis koneksi ONU di OLT.
+- **SN (Serial Number) ONU** — kode unik perangkat, dipakai untuk registrasi.
+- **ONT Status** — di OLT kamu akan melihat `O1 (initial)`, `O5 (operation)` dan seterusnya. `O5` artinya ONU sudah aktif normal.
+- **LOID (Logical ONU ID)** — otentikasi berbasis ID, umum di operator besar agar penggantian ONU mudah.
+
+## Kesimpulan
+
+GPON adalah arsitektur point-to-multipoint yang pasif dan murah per pelanggan: satu OLT, satu splitter, puluhan ONU, satu fiber per rumah. Memahami alur cahaya, panjang gelombang, dan level daya membuatmu tidak buta saat ada trouble "internet putus nyambung" — masalahnya hampir selalu bisa ditebak dari nilai Rx power.
+
+*Lanjut baca: [OLT: Otak di Sisi Provider](/blog/olt) dan [Dasar Jaringan Komputer](/blog/dasar-jaringan-komputer).*

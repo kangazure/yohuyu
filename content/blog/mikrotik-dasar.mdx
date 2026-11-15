@@ -1,0 +1,97 @@
+---
+title: "MikroTik untuk Pemula: dari RouterBoard sampai RouterOS"
+description: "Mengenal MikroTik: perbedaan RouterBoard dan RouterOS, cara akses Winbox, konfigurasi awal, DHCP, NAT, hingga backup konfigurasi."
+category: "MIKROTIK"
+tags: [mikrotik, routeros, winbox, nat, dhcp]
+date: "2026-08-16"
+updatedAt: "2026-08-16"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+MikroTik adalah sistem operasi router (RouterOS) yang jalan di perangkat keras router (RouterBoard) buatan MikroTik, Latvia. Harganya terjangkau, fiturnya lengkap — makanya ia jadi tulang punggung banyak ISP dan kantor di Indonesia.
+
+## RouterBoard vs RouterOS
+
+- **RouterBoard** — perangkat kerasnya. Ada yang murah (hSeries, RB750-style) sampai kelas ISP (CCR, Cloud Core Router).
+- **RouterOS** — sistem operasinya. RouterOS bisa juga diinstall di PC biasa (disebut x86/CHR) — itu cara banyak orang belajar tanpa beli hardware.
+
+Komponen penting: CPU, RAM, storage, dan **interface** — port ethernet atau wireless. Setiap interface punya nama default seperti `ether1`, `ether2`.
+
+## Cara Mengakses Router
+
+Ada dua cara utama:
+
+**1. Winbox** (GUI, paling populer) — download dari mikrotik.com, masukkan IP router & user admin. Pertama kali, sambungkan kabel ke ether1? Tidak selalu — cek label router. Default IP akses biasanya `192.168.88.1` pada interface `ether1` untuk model standar.
+
+**2. Terminal / SSH** — profesional lebih suka CLI karena cepat dan bisa script:
+
+```bash
+ssh admin@192.168.88.1
+```
+
+## Konfigurasi Awal Wajib
+
+Ganti password dan beri identitas router dulu:
+
+```bash
+/system identity set name=router-rumah
+/user set admin password=password-baru-yang-kuat
+```
+
+## Setup Internet + LAN dalam Beberapa Baris
+
+Skenario: ISP memberi IP DHCP di `ether1`, LAN di `ether2` dengan network `192.168.1.0/24`.
+
+```bash
+# 1. interface WAN dapat IP otomatis dari ISP
+/ip dhcp-client add interface=ether1 disabled=no
+
+# 2. IP untuk LAN (gateway perangkat rumah)
+/ip address add address=192.168.1.1/24 interface=ether2
+
+# 3. DHCP server untuk perangkat LAN
+/ip pool add name=dhcp-pool ranges=192.168.1.100-192.168.1.200
+/ip dhcp-server add name=dhcp-lan interface=ether2 address-pool=dhcp-pool
+/ip dhcp-server network add address=192.168.1.0/24 gateway=192.168.1.1 dns-server=1.1.1.1
+
+# 4. NAT masquerade — biarkan LAN internetan
+/ip firewall nat add chain=srcnat src-address=192.168.1.0/24 out-interface=ether1 action=masquerade
+```
+
+Setelah ini, PC di LAN langsung bisa internet. Tiga bagian inti: IP, DHCP, NAT.
+
+## Memahami NAT Masquerade
+
+`Masquerade` membuat semua perangkat LAN "meminjam" IP publik dari interface WAN saat keluar internet. Tanpa baris ini, paket dari LAN keluar dengan IP private `192.168.1.x` — dan router internet di luar sana akan membuangnya.
+
+## Firewall Dasar
+
+Minimal, proteksi router dari akses luar:
+
+```bash
+# buang paket yang tidak dikenal (stateful — aman buat LAN?)
+# ... sederhananya: buang koneksi yang bukan dari LAN
+/ip firewall filter add chain=input connection-state=invalid action=drop
+/ip firewall filter add chain=input in-interface=ether1 connection-state=new action=drop comment="blok akses WAN ke router"
+```
+
+Aturan `chain=input` mengontrol paket yang **menuju router itu sendiri**. `chain=forward` yang mengatur paket lewat (antar LAN ↔ internet).
+
+## Backup — Gaya Hidup Admin
+
+Konfigurasi MikroTik hilang dalam sekejap saat router reset. Backup rutin:
+
+```bash
+/system backup save name=backup-2026-08-16
+# simpan file .backup-nya ke PC lewat Winbox (Files) atau:
+/scp 10.0.0.1 backup-2026-08-16.backup (di terminal Winbox yang baru)
+```
+
+Ada juga `/export file=config-2026-08-16` — hasilnya teks, bisa dibaca & dibandingkan via git. Ini favorit untuk dokumentasi.
+
+## Kesimpulan
+
+MikroTik terlihat menakutkan karena terminalnya, tapi alurnya selalu sama: beri IP, beri DHCP, beri NAT — lalu masak firewall. Latihan di CHR atau GNS3 jauh lebih murah daripada salah konfigurasi di router produksi.
+
+*Lanjut baca: [VLAN di MikroTik](/blog/vlan) dan [GPON: Jaringan Fiber](/blog/gpon).*

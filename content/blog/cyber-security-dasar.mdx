@@ -1,0 +1,71 @@
+---
+title: "Cyber Security untuk Pemula: Mulai dari Mana?"
+description: "Peta jalan belajar keamanan siber: apa itu CIA triad, jenis serangan umum, area karier, dan langkah pertama yang aman & legal untuk mulai."
+category: "CYBER SECURITY"
+tags: [cyber security, ethical hacking, cia triad, belajar]
+date: "2026-08-07"
+updatedAt: "2026-08-07"
+author: "Riko Ardianto"
+cover: "/images/blog/security.svg"
+---
+
+Cyber security adalah praktik melindungi sistem, jaringan, dan data dari serangan digital. Bukan cuma soal "hacking keren" — sebagian besar pekerjaannya adalah mencegah, mendeteksi, dan merespons.
+
+Artikel ini adalah peta jalan: konsep inti, jenis serangan, dan langkah pertama yang benar.
+
+## Konsep Inti: CIA Triad
+
+Semua kebijakan keamanan pada akhirnya menjunjung tiga pilar:
+
+- **Confidentiality (Kerahasiaan)** — data hanya bisa diakses pihak berwenang. Alatnya: enkripsi, akses kontrol.
+- **Integrity (Keutuhan)** — data tidak diubah tanpa izin. Alatnya: hash, checksum, signature digital.
+- **Availability (Ketersediaan)** — data dan layanan tetap bisa diakses saat dibutuhkan. Musuhnya: DDoS, ransomware.
+
+Contoh nyata penerapan: HTTPS menjaga confidentiality (dengan TLS) dan integrity (dengan autentikasi), sedangkan DDoS attack menyerang availability.
+
+## Jenis Serangan yang Paling Sering Terjadi
+
+Kamu akan bertemu istilah-istilah ini terus:
+
+- **Phishing** — tipu daya lewat email/pesan palsu untuk mencuri kredensial. Penyebab mayoritas kebocoran data.
+- **Malware** — virus, worm, trojan, ransomware. Ransomware mengenkripsi data lalu minta tebusan.
+- **DDoS** — membanjiri layanan dengan traffic sampai tumbang.
+- **Man-in-the-Middle** — menyadap komunikasi antara dua pihak.
+- **SQL Injection** — menyuntikkan kueri jahat ke aplikasi web.
+- **Social Engineering** — menipu manusia, bukan mesin. Paling sulit ditangkal: manusia tidak bisa di-patch.
+
+## Kalau Mau Belajar: Area yang Bisa Dipilih
+
+| Area | Deskripsi | Skill inti |
+| --- | --- | --- |
+| Security Operations (SOC) | Monitor & respons alert | Log analysis, SIEM |
+| Penetration Testing | Menguji keamanan sistem dengan izin | Networking, Linux, *nix tools |
+| Incident Response | Menangani breach & recovery | Forensik, komunikasi |
+| Security Engineering | Membangun kontrol aman | Cloud, coding, arsitektur |
+| GRC (Governance) | Kebijakan & kepatuhan | Standar (ISO 27001, NIST) |
+
+Kebanyakan orang mulai dari SOC atau penetration testing karena jalur belajarnya jelas.
+
+## Langkah Pertama yang Benar (dan Legal)
+
+Urutan yang saya rekomendasikan:
+
+1. **Kuasai dasar jaringan** — tanpa paham TCP/IP, DNS, HTTP, semua tools keamanan hanya jadi magic blackbox. Pelajari materi di blog ini: [dasar jaringan](/blog/dasar-jaringan-komputer), [IP address](/blog/ip-address).
+2. **Kuasai Linux** — sebagian besar tool security jalan di Linux. Mulai dari terminal, permission, file system.
+3. **Belajar satu tools secara jujur** — Nmap untuk scanning, Wireshark untuk analisis traffic.
+4. **Berlatih di lingkungan legal** — hanya di lab sendiri, [Kali Linux](/blog/kali-linux) di virtual machine, atau platform latihan berlisensi (TryHackMe, HackTheBox, OverTheWire).
+5. **Ikuti path sertifikasi** — untuk Indonesia: mulai dari Network+ → Security+ → eJPT/CEH/OSCP sesuai arah.
+
+## Aturan Emas yang Tidak Boleh Dilanggar
+
+Tulis dan tempel di monitor:
+
+> **Jangan pernah menguji sesuatu yang bukan milikmu, tanpa izin tertulis.**
+
+Satu scan NMAP ke jaringan kampus/kantor tanpa izin sudah bisa dikategorikan melanggar UU ITE. Tujuan belajar adalah melindungi, bukan merusak — dan kredibilitas kariermu dimulai dari sini.
+
+## Kesimpulan
+
+Cyber security adalah disiplin yang luas tapi berurutan: pahami dasar jaringan, kuasai sistem, coba tools di lingkungan legal, lalu pilih spesialisasi. Yang membedakan kamu dari "script kiddie" bukan tools-nya, tapi pemahaman tentang *kenapa* serangan bekerja dan *bagaimana* mencegahnya.
+
+*Lanjut baca: [Belajar Nmap](/blog/nmap-dasar), [Wireshark untuk Analisis](/blog/wireshark-dasar), dan [Kali Linux](/blog/kali-linux).*

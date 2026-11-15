@@ -1,0 +1,90 @@
+---
+title: "Dasar Jaringan Komputer untuk Pemula"
+description: "Memahami cara kerja jaringan komputer: perangkat, topologi, model OSI, dan istilah-istilah yang wajib diketahui — ditulis untuk yang baru mulai."
+category: "NETWORKING"
+tags: [jaringan, dasar, osi, topologi, perangkat jaringan]
+date: "2026-08-28"
+updatedAt: "2026-08-28"
+author: "Riko Ardianto"
+cover: "/images/blog/networking.svg"
+---
+
+Jaringan komputer adalah dua atau lebih perangkat yang saling terhubung untuk berbagi data. Kedengarannya sederhana, tapi di balik internet yang kita pakai setiap hari ada lapisan teknologi yang sangat dalam.
+
+Artikel ini membahas dasar-dasarnya secara berurutan, tanpa jargon yang tidak perlu.
+
+## Perangkat yang Terlibat
+
+Ada beberapa perangkat yang hampir selalu ada di jaringan, baik di rumah maupun ISP:
+
+- **Router** — penghubung antar jaringan. Router di rumah menghubungkan jaringan lokal (LAN) ke internet (WAN).
+- **Switch** — penghubung antar perangkat dalam satu jaringan. Bekerja dengan memakai alamat MAC.
+- **Access Point** — mengubah kabel menjadi sinyal Wi-Fi.
+- **Modem / ONT** — mengubah sinyal dari ISP (kabel atau fiber) menjadi data digital.
+
+## Topologi Jaringan
+
+Topologi adalah cara perangkat disusun secara logis:
+
+| Topologi | Kelebihan | Kekurangan |
+| --- | --- | --- |
+| Star | Mudah dikelola, satu kabel putus tidak merusak semua | Switch pusat jadi titik tunggal |
+| Bus | Hemat kabel | Gangguan di satu titik mengganggu semua |
+| Ring | Data mengalir dua arah | Paket harus lewat banyak hop |
+| Mesh | Sangat andal, banyak jalur cadangan | Mahal dan kompleks |
+
+Untuk jaringan rumahan dan kantor kecil, topologi **star** paling umum: semua perangkat nyambung ke satu switch atau router.
+
+## Model OSI Secara Singkat
+
+Model OSI (Open Systems Interconnection) membagi komunikasi jaringan jadi 7 lapisan. Kamu tidak perlu hafal semua detailnya, tapi urutannya membantu memahami di mana suatu masalah terjadi:
+
+```text
+7 Application  → HTTP, HTTPS, DNS, SMTP
+6 Presentation → enkripsi, konversi format
+5 Session      → mengatur sesi komunikasi
+4 Transport    → TCP, UDP — keandalan pengiriman
+3 Network      → IP — alamat dan routing
+2 Data Link    → MAC address, switch, frame
+1 Physical     → kabel, fiber, gelombang radio
+```
+
+Cara gampang mengingat dari bawah ke atas: **"Please Do Not Throw Sausage Pizza Away"** — Physical, Data, Network, Transport, Session, Presentation, Application.
+
+## Alamat IP dan MAC
+
+Setiap perangkat di jaringan butuh identitas:
+
+- **IP address** — alamat logis, bisa berubah, diatur oleh router (DHCP). Contoh: `192.168.1.10`.
+- **MAC address** — alamat fisik yang melekat di kartu jaringan, unik dari pabrik. Contoh: `A4:5E:60:01:02:03`.
+
+Router memakai IP untuk melempar paket antar jaringan; switch memakai MAC untuk mengirim frame ke perangkat yang tepat di dalam jaringan yang sama.
+
+## Cara Cek Jaringan di Terminal
+
+Kamu bisa mulai mencoba dari komputer sendiri:
+
+```bash
+# lihat IP sendiri (Linux)
+ip addr show
+
+# Windows
+ipconfig
+
+# tes koneksi ke sebuah host
+ping -c 4 google.com
+
+# lihat jalur yang dilalui paket
+traceroute google.com
+
+# cek DNS
+nslookup rikoardianto.web.id
+```
+
+Biasakan membaca output perintah ini — setiap barisnya memberi tahu kondisi jaringan kamu.
+
+## Kesimpulan
+
+Jaringan itu soal dua hal: **konektivitas** (perangkat saling terhubung) dan **identitas** (IP + MAC mengarahkan data ke tujuan). Setelah dua konsep ini nyambung, memahami topik lanjutan seperti subnetting, VLAN, atau MikroTik jadi jauh lebih mudah.
+
+*Lanjut baca: [IP Address dan Kelasnya](/blog/ip-address) atau [Subnetting dengan Contoh](/blog/subnetting).*
