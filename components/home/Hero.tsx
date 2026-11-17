@@ -6,7 +6,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { ArrowRight, BookOpen, ShieldCheck, Zap } from 'lucide-react';
-import { HERO_WORDS, SECURE_CONNECT_BUILD } from '@/data/config';
+import { HERO_WORDS, HERO_ROLES, SECURE_CONNECT_BUILD } from '@/data/config';
 import { ParallaxBackground } from '@/components/background/ParallaxBackground';
 import { TypingText } from '@/components/ui/TypingText';
 import { TiltCard } from '@/components/ui/TiltCard';
@@ -92,6 +92,31 @@ export function Hero() {
               <br />
               ARDIANTO
             </motion.h1>
+
+            {/* typing effect berputar di bawah nama */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-3 flex items-baseline gap-2 overflow-hidden min-h-[1.6em]"
+            >
+              <span className="font-mono text-sm tracking-[0.2em] text-muted">&gt;&nbsp;</span>
+              <TypingText
+                texts={HERO_ROLES}
+                textColors={[
+                  '#22d3ee',
+                  '#a78bfa',
+                  '#34d399',
+                  '#f472b6',
+                  '#60a5fa',
+                  '#fbbf24',
+                ]}
+                className="font-mono text-base md:text-lg font-semibold tracking-widest [text-shadow:0_0_14px_rgba(139,92,246,0.6),0_0_28px_rgba(8,145,178,0.3)]"
+                typingSpeed={70}
+                deleteSpeed={40}
+                holdTime={1400}
+              />
+            </motion.div>
 
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 20 }}
