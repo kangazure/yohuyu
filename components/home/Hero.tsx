@@ -6,7 +6,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { ArrowRight, BookOpen, ShieldCheck, Zap } from 'lucide-react';
-import { HERO_WORDS, HERO_ROLES, SECURE_CONNECT_BUILD } from '@/data/config';
+import { HERO_ROLES, SECURE_CONNECT_BUILD } from '@/data/config';
 import { ParallaxBackground } from '@/components/background/ParallaxBackground';
 import { TypingText } from '@/components/ui/TypingText';
 import { TiltCard } from '@/components/ui/TiltCard';
@@ -21,14 +21,6 @@ const NetworkScene = dynamic(() => import('@/components/three/NetworkScene').the
 
 const PROFILE_IMAGE = '/images/profile/riko-ardianto.svg'; // TODO: ganti ke riko-ardianto.webp saat foto asli tersedia
 
-const TYPING_COLORS = [
-  '#22d3ee',
-  '#8b5cf6',
-  '#a78bfa',
-  '#34d399',
-  '#f472b6',
-  '#60a5fa',
-];
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -124,12 +116,7 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
               className="mt-4 text-lg text-muted md:text-xl"
             >
-              ONLINE SHOP ·{' '}
-              <TypingText
-                texts={HERO_WORDS}
-                textColors={TYPING_COLORS}
-                className="font-semibold text-accent [text-shadow:0_0_18px_rgba(139,92,246,0.65)]"
-              />
+              ONLINE SHOP · NETWORK ENGINEER · CYBER SECURITY
             </motion.p>
 
             <motion.p
