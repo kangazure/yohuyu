@@ -5,7 +5,6 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import remarkRehype from 'remark-rehype';
 import rehypeSlug from 'rehype-slug';
-import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 import type { BlogMeta } from '@/data/types';
 import { BLOG_CATEGORIES } from '@/lib/categories';
@@ -95,7 +94,6 @@ export function getPostBySlug(slug: string): BlogPost | null {
   const processed = remark()
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeSlug)
-    .use(rehypeHighlight)
     .use(rehypeStringify)
     .processSync(content);
   const html = String(processed);
