@@ -86,7 +86,7 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[clamp(2.6rem,7vw,4.6rem)] font-bold leading-[1.05] tracking-tight text-fg"
+              className="hero-name-neon text-[clamp(2.6rem,7vw,4.6rem)] font-bold leading-[1.05] tracking-tight"
             >
               RIKO
               <br />

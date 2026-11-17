@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -27,25 +27,41 @@ export function TypingText({
   holdTime = 1800,
 }: TypingTextProps) {
   const reduce = useReducedMotion();
+  const mountedRef = useRef(true);
   const [textIndex, setTextIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     if (reduce) return;
     const current = texts[textIndex] ?? '';
     let timer: ReturnType<typeof setTimeout>;
+
+    const schedule = (fn: () => void, ms: number) => {
+      timer = setTimeout(() => {
+        if (mountedRef.current) fn();
+      }, ms);
+    };
+
     if (deleting) {
       if (subIndex === 0) {
-        setDeleting(false);
-        setTextIndex((i) => (i + 1) % texts.length);
+        schedule(() => {
+          setDeleting(false);
+          setTextIndex((i) => (i + 1) % texts.length);
+        }, deleteSpeed);
       } else {
-        timer = setTimeout(() => setSubIndex((s) => s - 1), deleteSpeed);
+        schedule(() => setSubIndex((s) => s - 1), deleteSpeed);
       }
     } else if (subIndex === current.length) {
-      timer = setTimeout(() => setDeleting(true), holdTime);
+      schedule(() => setDeleting(true), holdTime);
     } else {
-      timer = setTimeout(() => setSubIndex((s) => s + 1), typingSpeed);
+      schedule(() => setSubIndex((s) => s + 1), typingSpeed);
     }
     return () => clearTimeout(timer);
   }, [subIndex, deleting, textIndex, texts, typingSpeed, deleteSpeed, holdTime, reduce]);

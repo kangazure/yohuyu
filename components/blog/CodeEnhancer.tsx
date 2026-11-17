@@ -1,13 +1,21 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
  * Menuangkan HTML statis hasil markdown, lalu menambahkan tombol
- * copY pada tiap blok kode (mutasi DOM yang React tidak kelola —
+ * copy pada tiap blok kode (mutasi DOM yang React tidak kelola —
  * aman karena konten dirender via dangerouslySetInnerHTML).
  */
 export function CodeEnhancer({ html }: { html: string }) {
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   useEffect(() => {
     const blocks = document.querySelectorAll<HTMLElement>('[data-post-content] pre');
     blocks.forEach((pre) => {
@@ -24,15 +32,19 @@ export function CodeEnhancer({ html }: { html: string }) {
 
       const code = pre.querySelector('code');
       btn.addEventListener('click', async () => {
+        if (!mountedRef.current) return;
         const raw = code?.textContent ?? '';
         try {
           await navigator.clipboard.writeText(raw);
+          if (!mountedRef.current) return;
           btn.textContent = 'COPIED ✓';
           btn.classList.add('text-neon');
         } catch {
+          if (!mountedRef.current) return;
           btn.textContent = 'FAILED';
         }
         setTimeout(() => {
+          if (!mountedRef.current) return;
           btn.textContent = 'COPY';
           btn.classList.remove('text-neon');
         }, 1800);

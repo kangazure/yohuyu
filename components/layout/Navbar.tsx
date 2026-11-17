@@ -8,6 +8,7 @@ import { ShoppingBag } from 'lucide-react';
 import { siteConfig } from '@/data/config';
 import { cn } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 function HamburgerIcon({ open }: { open: boolean }) {
   return (
@@ -98,7 +99,8 @@ export function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <a
               href={siteConfig.shopUrl}
               target="_blank"

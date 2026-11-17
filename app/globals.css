@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* palet dark futuristic */
+  /* ===== DARK THEME (default) ===== */
   --color-void: #03040a;
   --color-navy: #070b1a;
   --color-surface: #0b1120;
@@ -20,6 +20,21 @@
     monospace;
 }
 
+/* ===== LIGHT THEME OVERRIDES ===== */
+[data-theme="light"] {
+  --color-void: #f4f6fb;
+  --color-navy: #e8ebf4;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f3fa;
+  --color-fg: #0f172a;
+  --color-muted: #475569;
+  --color-faint: #94a3b8;
+  --color-line: rgba(15, 23, 42, 0.12);
+  --color-accent: #7c3aed;
+  --color-accent-hover: #6d28d9;
+  --color-neon: #0891b2;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -35,6 +50,7 @@ body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 /* noise overlay global */
@@ -74,6 +90,12 @@ body::before {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #34405f;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 @layer components {
@@ -141,6 +163,12 @@ body::before {
     -webkit-backdrop-filter: blur(14px);
   }
 
+  [data-theme="light"] .card-glass {
+    background: linear-gradient(160deg, rgba(255,255,255,0.85), rgba(240,243,250,0.95));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
   .chip-float {
     animation: chip-float 5.5s ease-in-out infinite;
   }
@@ -166,6 +194,61 @@ body::before {
     white-space: nowrap;
     transform: translate(-50%, 8px);
     backdrop-filter: blur(6px);
+  }
+
+  [data-theme="light"] .net-label {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ===== RIKO ARDIANTO neon glow pada hero ===== */
+
+  .hero-name-neon {
+    text-shadow:
+      0 0 4px rgba(34, 211, 238, 0.6),
+      0 0 12px rgba(34, 211, 238, 0.4),
+      0 0 30px rgba(139, 92, 236, 0.35),
+      0 0 60px rgba(139, 92, 236, 0.18);
+    animation: neon-breathe 3.5s ease-in-out infinite;
+  }
+
+  [data-theme="light"] .hero-name-neon {
+    text-shadow:
+      0 0 4px rgba(8, 145, 178, 0.35),
+      0 0 14px rgba(8, 145, 178, 0.18),
+      0 0 32px rgba(124, 58, 237, 0.12);
+    animation: neon-breathe-light 3.5s ease-in-out infinite;
+  }
+
+  @keyframes neon-breathe {
+    0%, 100% {
+      text-shadow:
+        0 0 4px rgba(34, 211, 238, 0.6),
+        0 0 12px rgba(34, 211, 238, 0.4),
+        0 0 30px rgba(139, 92, 236, 0.35),
+        0 0 60px rgba(139, 92, 236, 0.18);
+    }
+    50% {
+      text-shadow:
+        0 0 6px rgba(34, 211, 238, 0.8),
+        0 0 18px rgba(34, 211, 238, 0.55),
+        0 0 42px rgba(139, 92, 236, 0.5),
+        0 0 80px rgba(139, 92, 236, 0.28);
+    }
+  }
+
+  @keyframes neon-breathe-light {
+    0%, 100% {
+      text-shadow:
+        0 0 4px rgba(8, 145, 178, 0.35),
+        0 0 14px rgba(8, 145, 178, 0.18),
+        0 0 32px rgba(124, 58, 237, 0.12);
+    }
+    50% {
+      text-shadow:
+        0 0 7px rgba(8, 145, 178, 0.5),
+        0 0 20px rgba(8, 145, 178, 0.28),
+        0 0 40px rgba(124, 58, 237, 0.2);
+    }
   }
 
   /* ===== efek ketik hero ===== */
@@ -225,6 +308,9 @@ body::before {
   .post-content a:hover {
     color: #67e8f9;
   }
+  [data-theme="light"] .post-content a:hover {
+    color: #0891b2;
+  }
   .post-content strong {
     color: var(--color-fg);
     font-weight: 600;
@@ -271,9 +357,16 @@ body::before {
     line-height: 1.7;
     font-size: 13px;
   }
+  [data-theme="light"] .post-content pre {
+    background: #0f172a;
+    color: #e2e8f0;
+  }
   .post-content pre code {
     font-family: var(--font-mono);
     color: #c7d2e8;
+  }
+  [data-theme="light"] .post-content pre code {
+    color: #e2e8f0;
   }
   .post-content table {
     width: 100%;
@@ -371,6 +464,10 @@ body::before {
   .input-ghost:focus {
     border-color: rgba(139, 92, 246, 0.7);
   }
+  [data-theme="light"] .input-ghost {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: var(--color-line);
+  }
 
   .select-ghost {
     appearance: none;
@@ -451,5 +548,17 @@ body::before {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .hero-name-neon {
+    animation: none !important;
+    text-shadow:
+      0 0 4px rgba(34, 211, 238, 0.6),
+      0 0 12px rgba(34, 211, 238, 0.4),
+      0 0 30px rgba(139, 92, 236, 0.35);
+  }
+  [data-theme="light"] .hero-name-neon {
+    text-shadow:
+      0 0 4px rgba(8, 145, 178, 0.35),
+      0 0 14px rgba(8, 145, 178, 0.18);
   }
 }
