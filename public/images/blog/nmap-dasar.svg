@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1152 630" width="1152" height="630">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#0d1525"/>
+<stop offset="100%" stop-color="#070d1a"/>
+</linearGradient>
+<radialGradient id="glow" cx="70%" cy="35%" r="65%">
+<stop offset="0%" stop-color="#ef4444" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect x="0" y="0" width="1152" height="630" fill="url(#bg)" rx="0"/>
+<rect x="0" y="0" width="1152" height="630" fill="url(#glow)" rx="0"/>
+<line x1="8" y1="0" x2="8" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="96" y1="0" x2="96" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="184" y1="0" x2="184" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="272" y1="0" x2="272" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="360" y1="0" x2="360" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="448" y1="0" x2="448" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="536" y1="0" x2="536" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="624" y1="0" x2="624" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="712" y1="0" x2="712" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="800" y1="0" x2="800" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="888" y1="0" x2="888" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="976" y1="0" x2="976" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="1064" y1="0" x2="1064" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="40" x2="1152" y2="40" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="120" x2="1152" y2="120" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="200" x2="1152" y2="200" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="280" x2="1152" y2="280" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="360" x2="1152" y2="360" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="440" x2="1152" y2="440" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="520" x2="1152" y2="520" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="600" x2="1152" y2="600" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<rect x="0.5" y="0.5" width="1151" height="629" fill="none" rx="rgba(148,163,194,0.1)" stroke="1"/><circle cx="576" cy="310" r="60" fill="none"/>
+<circle cx="576" cy="310" r="120" fill="none"/>
+<circle cx="576" cy="310" r="180" fill="none"/>
+<circle cx="576" cy="310" r="240" fill="none"/>
+<circle cx="576" cy="310" r="300" fill="none"/>
+<path d="M576,310 L780,180 A240,240 0 0,0 720,440 Z" fill="rgba(239,68,68,0.05)"/>
+<line x1="576" y1="310" x2="760" y2="200" stroke="rgba(239,68,68,0.5)" strokeWidth="1.5"/>
+<circle cx="400" cy="200" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="400" cy="200" r="10" fill="none"/>
+<circle cx="700" cy="230" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="700" cy="230" r="10" fill="none"/>
+<circle cx="380" cy="400" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="380" cy="400" r="10" fill="none"/>
+<circle cx="720" cy="420" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="720" cy="420" r="10" fill="none"/>
+<circle cx="500" cy="150" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="500" cy="150" r="10" fill="none"/>
+<circle cx="650" cy="460" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="650" cy="460" r="10" fill="none"/>
+<circle cx="300" cy="300" r="4" fill="rgba(239,68,68,0.7)"/>
+<circle cx="300" cy="300" r="10" fill="none"/>
+<rect x="180" y="490" width="400" height="80" fill="rgba(0,0,0,0.4)" rx="rgba(239,68,68,0.2)" stroke="1"/>
+<text x="200" y="510" font-size="12" font-family="monospace" fill="rgba(239,68,68,0.7)" letter-spacing="0.03em">
+Nmap scan report for 192.168.1.1
+</text>
+<text x="200" y="532" font-size="11" font-family="monospace" fill="rgba(239,68,68,0.4)" letter-spacing="0.03em">
+PORT     STATE  SERVICE
+</text>
+<text x="200" y="550" font-size="11" font-family="monospace" fill="rgba(34,197,94,0.6)" letter-spacing="0.03em">
+22/tcp   open   ssh
+</text>
+<text x="200" y="566" font-size="11" font-family="monospace" fill="rgba(34,197,94,0.6)" letter-spacing="0.03em">
+80/tcp   open   http
+</text>
+<text x="640" y="490" font-size="12" font-family="monospace" fill="rgba(239,68,68,0.5)" letter-spacing="0.03em">
+nmap -sV -sC 192.168.1.0/24
+</text>
+<text x="640" y="515" font-size="10" font-family="monospace" fill="rgba(239,68,68,0.3)" letter-spacing="0.03em">
+SYN SCAN • VERSION DETECTION
+</text>
+<text x="64" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+RIKOARDIANTO.ID
+</text><text x="1088" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+1152×630 • COVER IMAGE
+</text></svg>

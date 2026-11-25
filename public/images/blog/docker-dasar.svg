@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1152 630" width="1152" height="630">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#0d1525"/>
+<stop offset="100%" stop-color="#070d1a"/>
+</linearGradient>
+<radialGradient id="glow" cx="70%" cy="35%" r="65%">
+<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect x="0" y="0" width="1152" height="630" fill="url(#bg)" rx="0"/>
+<rect x="0" y="0" width="1152" height="630" fill="url(#glow)" rx="0"/>
+<line x1="8" y1="0" x2="8" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="96" y1="0" x2="96" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="184" y1="0" x2="184" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="272" y1="0" x2="272" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="360" y1="0" x2="360" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="448" y1="0" x2="448" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="536" y1="0" x2="536" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="624" y1="0" x2="624" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="712" y1="0" x2="712" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="800" y1="0" x2="800" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="888" y1="0" x2="888" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="976" y1="0" x2="976" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="1064" y1="0" x2="1064" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="40" x2="1152" y2="40" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="120" x2="1152" y2="120" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="200" x2="1152" y2="200" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="280" x2="1152" y2="280" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="360" x2="1152" y2="360" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="440" x2="1152" y2="440" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="520" x2="1152" y2="520" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="600" x2="1152" y2="600" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<rect x="0.5" y="0.5" width="1151" height="629" fill="none" rx="rgba(148,163,194,0.1)" stroke="1"/><rect x="370" y="180" width="105" height="75" fill="rgba(59,130,246,0.09)" rx="rgba(59,130,246,0.38)" stroke="1.5"/>
+<rect x="378" y="188" width="89" height="59" fill="rgba(59,130,246,0.05)" rx="0"/>
+<text x="422.5" y="223.5" font-size="22" font-family="monospace" fill="rgba(59,130,246,0.55)">
+⎈
+</text>
+<rect x="500" y="160" width="105" height="75" fill="rgba(59,130,246,0.09)" rx="rgba(59,130,246,0.38)" stroke="1.5"/>
+<rect x="508" y="168" width="89" height="59" fill="rgba(59,130,246,0.05)" rx="0"/>
+<text x="552.5" y="203.5" font-size="22" font-family="monospace" fill="rgba(59,130,246,0.55)">
+⬡
+</text>
+<rect x="630" y="190" width="105" height="75" fill="rgba(59,130,246,0.09)" rx="rgba(59,130,246,0.38)" stroke="1.5"/>
+<rect x="638" y="198" width="89" height="59" fill="rgba(59,130,246,0.05)" rx="0"/>
+<text x="682.5" y="233.5" font-size="22" font-family="monospace" fill="rgba(59,130,246,0.55)">
+⏣
+</text>
+<rect x="420" y="300" width="105" height="75" fill="rgba(59,130,246,0.09)" rx="rgba(59,130,246,0.38)" stroke="1.5"/>
+<rect x="428" y="308" width="89" height="59" fill="rgba(59,130,246,0.05)" rx="0"/>
+<text x="472.5" y="343.5" font-size="22" font-family="monospace" fill="rgba(59,130,246,0.55)">
+⎔
+</text>
+<rect x="560" y="280" width="105" height="75" fill="rgba(59,130,246,0.09)" rx="rgba(59,130,246,0.38)" stroke="1.5"/>
+<rect x="568" y="288" width="89" height="59" fill="rgba(59,130,246,0.05)" rx="0"/>
+<text x="612.5" y="323.5" font-size="22" font-family="monospace" fill="rgba(59,130,246,0.55)">
+⌘
+</text>
+<rect x="300" y="395" width="550" height="10" fill="rgba(59,130,246,0.18)" rx="0"/>
+<path d="M310,415 Q320,410 330,415 T350,415" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M348,418.5867804544976 Q358,413.5867804544976 368,418.5867804544976 T388,418.5867804544976" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M386,419.99786801520753 Q396,414.99786801520753 406,419.99786801520753 T426,419.99786801520753" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M424,418.37731590275575 Q434,413.37731590275575 444,418.37731590275575 T464,418.37731590275575" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M462,414.7081292828621 Q472,409.7081292828621 482,414.7081292828621 T502,414.7081292828621" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M500,411.21598752346034 Q510,406.21598752346034 520,411.21598752346034 T540,411.21598752346034" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M538,410.0191769558208 Q548,405.0191769558208 558,410.0191769558208 T578,410.0191769558208" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M576,411.8436668106384 Q586,406.8436668106384 596,411.8436668106384 T616,411.8436668106384" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M614,415.58274602425246 Q624,410.58274602425246 634,415.58274602425246 T654,415.58274602425246" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M652,418.9683393192458 Q662,413.9683393192458 672,418.9683393192458 T692,418.9683393192458" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M690,419.9467912331169 Q700,414.9467912331169 710,419.9467912331169 T730,419.9467912331169" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M728,417.9245859644588 Q738,412.9245859644588 748,417.9245859644588 T768,417.9245859644588" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M766,414.1283660938851 Q776,409.1283660938851 786,414.1283660938851 T806,414.1283660938851" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<path d="M804,410.86086765457173 Q814,405.86086765457173 824,410.86086765457173 T844,410.86086765457173" fill="none" stroke="rgba(59,130,246,0.12)" strokeWidth="1.5"/>
+<text x="180" y="530" font-size="11" font-family="monospace" fill="rgba(59,130,246,0.35)" letter-spacing="0.03em">
+IMAGE • CONTAINER • DOCKERFILE • COMPOSE
+</text>
+<text x="64" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+RIKOARDIANTO.ID
+</text><text x="1088" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+1152×630 • COVER IMAGE
+</text></svg>

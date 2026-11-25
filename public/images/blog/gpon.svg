@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1152 630" width="1152" height="630">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#0d1525"/>
+<stop offset="100%" stop-color="#070d1a"/>
+</linearGradient>
+<radialGradient id="glow" cx="70%" cy="35%" r="65%">
+<stop offset="0%" stop-color="#a78bfa" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<rect x="0" y="0" width="1152" height="630" fill="url(#bg)" rx="0"/>
+<rect x="0" y="0" width="1152" height="630" fill="url(#glow)" rx="0"/>
+<line x1="8" y1="0" x2="8" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="96" y1="0" x2="96" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="184" y1="0" x2="184" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="272" y1="0" x2="272" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="360" y1="0" x2="360" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="448" y1="0" x2="448" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="536" y1="0" x2="536" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="624" y1="0" x2="624" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="712" y1="0" x2="712" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="800" y1="0" x2="800" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="888" y1="0" x2="888" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="976" y1="0" x2="976" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="1064" y1="0" x2="1064" y2="630" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="40" x2="1152" y2="40" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="120" x2="1152" y2="120" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="200" x2="1152" y2="200" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="280" x2="1152" y2="280" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="360" x2="1152" y2="360" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="440" x2="1152" y2="440" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="520" x2="1152" y2="520" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<line x1="0" y1="600" x2="1152" y2="600" stroke="rgba(148,163,194,0.03)" stroke-width="1"/>
+<rect x="0.5" y="0.5" width="1151" height="629" fill="none" rx="rgba(148,163,194,0.1)" stroke="1"/><rect x="490" y="110" width="172" height="50" fill="rgba(167,139,250,0.1)" rx="rgba(167,139,250,0.45)" stroke="1.5"/>
+<text x="576" y="140" font-size="16" font-family="monospace" fill="rgba(167,139,250,0.9)" font-weight="bold">
+OLT
+</text>
+<rect x="516" y="230" width="120" height="36" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.35)" stroke="1"/>
+<text x="576" y="252" font-size="12" font-family="monospace" fill="rgba(167,139,250,0.75)">
+SPLITTER 1:32
+</text>
+<path d="M576,266 Q300,310 300,390" fill="none" stroke="rgba(167,139,250,0.12)" strokeWidth="1.5"/>
+<rect x="262" y="390" width="76" height="40" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.3)" stroke="1"/>
+<text x="300" y="415" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.65)">
+ONU
+</text>
+<path d="M288,432 L300,444 L312,432 Z" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.25)" strokeWidth="1"/>
+<path d="M576,266 Q440,318 440,390" fill="none" stroke="rgba(167,139,250,0.16)" strokeWidth="1.5"/>
+<rect x="402" y="390" width="76" height="40" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.3)" stroke="1"/>
+<text x="440" y="415" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.65)">
+ONU
+</text>
+<path d="M428,432 L440,444 L452,432 Z" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.25)" strokeWidth="1"/>
+<path d="M576,266 Q576,326 576,390" fill="none" stroke="rgba(167,139,250,0.2)" strokeWidth="1.5"/>
+<rect x="538" y="390" width="76" height="40" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.3)" stroke="1"/>
+<text x="576" y="415" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.65)">
+ONU
+</text>
+<path d="M564,432 L576,444 L588,432 Z" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.25)" strokeWidth="1"/>
+<path d="M576,266 Q712,334 712,390" fill="none" stroke="rgba(167,139,250,0.24)" strokeWidth="1.5"/>
+<rect x="674" y="390" width="76" height="40" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.3)" stroke="1"/>
+<text x="712" y="415" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.65)">
+ONU
+</text>
+<path d="M700,432 L712,444 L724,432 Z" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.25)" strokeWidth="1"/>
+<path d="M576,266 Q850,342 850,390" fill="none" stroke="rgba(167,139,250,0.28)" strokeWidth="1.5"/>
+<rect x="812" y="390" width="76" height="40" fill="rgba(167,139,250,0.08)" rx="rgba(167,139,250,0.3)" stroke="1"/>
+<text x="850" y="415" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.65)">
+ONU
+</text>
+<path d="M838,432 L850,444 L862,432 Z" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.25)" strokeWidth="1"/>
+<text x="180" y="560" font-size="10" font-family="monospace" fill="rgba(167,139,250,0.3)" letter-spacing="0.03em">
+POINT-TO-MULTIPOINT • 2.5 Gbps DOWN • ITU-T G.984
+</text>
+<text x="64" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+RIKOARDIANTO.ID
+</text><text x="1088" y="606" font-size="10" font-family="monospace" fill="rgba(148,163,194,0.18)" letter-spacing="0.03em">
+1152×630 • COVER IMAGE
+</text></svg>
